@@ -1,0 +1,269 @@
+\documentclass[11pt,journal,compsoc]{IEEEtran}
+
+\usepackage{ctex}
+
+\usepackage{graphicx}
+
+\usepackage{url}
+
+\usepackage{hyperref}
+
+\usepackage{enumitem}
+
+\usepackage{amssymb}
+
+\usepackage{indentfirst}
+
+\setlength{\parindent}{0em}
+
+\begin{document}
+
+
+\section{Informatics}
+
+
+\subsection{Processors \& Memories}
+
+
+\subsubsection{Von Neumann Principle}
+
+程序 和 数据 储存在 单一独立的储存单元 内存 中，它们通过 共同的总线 进行访问。它们在 物理上 是相同的，计算机根据 指令 来处理它们，更容易重新编程。
+
+
+\subsubsection{Von Neumann Loop}
+
+\begin{enumerate}
+    \item CPU 从内存中取指令 Fetch
+    \item 解码以确定操作 Decode
+    \item 执行 Execute
+    \item 从内存中取
+    \item 写回内存
+\end{enumerate}
+
+重复，直到程序结束。CPU 在获取 指令和数据 之间交替，降低速度。
+
+
+\subsubsection{Von Neumann Architecture}
+
+存储器、运算器、控制器、输入设备和输出设备五部分组成计算机。运算器和控制器合称为中央处理器。
+
+
+\subsubsection{Harvard}
+
+此架构使用 两个不同的储存器 来 分别储存 指令和数据，不同的总线进行访问，速度更快，成本更高。
+
+
+\subsubsection{CISC}
+
+Complex / Reduced Instruction Set Computer
+
+复杂指令集的每个指令可执行若干低端操作，指令数目多而复杂，周期长，更适合复杂操作，简单操作可能浪费时间。
+
+寄存器昂贵，尽可能使单个指令做更多的工作
+
+
+\subsubsection{RISC}
+
+精简指令集针对流水线化的处理器优化，指令数目少，周期短，更好的并行执行，编译器的效率更高，便宜节能。
+
+x86 对简单指令有硬件加速。
+
+ARM V7 和之前没有 AES。
+
+
+\subsubsection{Commands}
+
+一组指示处理器执行特定操作的二进制代码，包含 OpCode 和 Operand 两部分，汇编。
+
+
+\subsubsection{Registers}
+
+CPU 内部用来存放临时数据的内存，非常快，很小。x86-64架构有 16 个通用寄存器。
+
+CPU $\leftrightarrow$ 寄存器 $\leftrightarrow$ 缓存 $\leftrightarrow$ 内存
+
+
+\subsubsection{Pipeline}
+
+指令流水线，将每条指令分解为多步，每个阶段可以并行执行不同的指令，从而实现几条指令并行处理。指令仍是一条条顺序执行，一个时钟周期内可以执行一条完整的指令。当一个指令在 Execute 时，另一个指令可以开始执行 Decode，以此类推。
+
+
+\subsubsection{Superscalar}
+
+在单个核心中有多个流水线，一个时钟周期内执行多个指令，并行地对多条指令进行流水处理。
+
+
+\subsubsection{Memories}
+
+按物理结构：
+
+\begin{description}
+    \item[SRAM] Field-Effect Transistor、无需刷新、极快、昂贵、CPU 缓存
+
+    \item[DRAM] Capacitance、周期刷新、内存
+
+    \item[ROM] 只读
+
+    \item[Programmable ROM] 内部有熔丝，利用电流将其烧断，以写入数据，一经烧断便无法恢复
+
+    \item[Erasable PROM] 利用高电压将数据写入，有透明窗口，曝光于紫外线时抹除数据
+
+    \item[OneTime PROM] 与 EPROM 一样，但不设置透明窗
+
+    \item[Electrically EPROM] 使用高电场来抹除
+
+    \item[Flash] NAND（SSD）与 NOR（BIOS）型、寿命有限、较慢
+\end{description}
+
+
+按组织方式：
+
+\begin{description}
+    \item[Serial] 比如 Magnetic Tape、密度高、速度慢、不能随机存取
+
+    \item[Parallel] 比如 Disk、同时读写多个比特
+
+    \item[Distributed] 信息存储于多个独立且互不干扰的设备中、可靠性、扩展性
+
+    \item[Hierarchical] 高效率，比如 Cache -> RAM -> ROM
+\end{description}
+
+
+按访问类型：
+
+\begin{description}
+    \item[Direct Memory Access] 不经过 CPU，比如显卡的 DirectStorage
+
+    \item[Sequential Access Memory] 磁带
+
+    \item[Random Access Memory] 内存
+\end{description}
+
+
+\subsection{Peripherals \& Storage \& I/O}
+
+
+\subsubsection{Storage}
+
+By Construction:
+
+\begin{description}
+    \item[Solid] SSD, Flash 速度快
+
+    \item[Optical] CD, use Laser
+
+    \item[Magnetic] HDD, Tape, Floppy 容量大
+\end{description}
+
+By Operation Principle:
+
+\begin{description}
+    \item[RAM] Volatile
+    \item[ROM] Non-Volatile
+    \item[Sequential]
+\end{description}
+
+
+\subsubsection{Peripherals}
+
+By Functionality:
+
+\begin{description}
+    \item[Input] Keyboard, Mouse
+    
+    \item[Output] Monitor, Speaker
+
+    \item[Storage] Flash Drive
+
+    \item[Network] Router, Switch
+\end{description}
+
+By Means:
+
+\begin{description}
+    \item[Wired]
+    \item[Wireless]
+\end{description}
+
+还有 Bidirectional 双向设备
+
+
+\subsection{Bus}
+
+is physical pathways used by CPU and other devices to communicate.
+
+
+\subsubsection{Data}
+
+CPU \leftrightarrow RAM
+
+CPU \leftrightarrow I/O Devices
+
+传输数据，宽度决定一次传输多少比特，常见 8 - 64 bits
+
+
+\subsubsection{Address}
+
+沟通物理地址，宽度决定寻址的内存大小
+
+
+\subsubsection{Control}
+
+控制 CPU 和设备的：读写、时钟、中断、复位 等信号
+
+
+\subsection{I/O}
+
+handling is the process of managing the communication between CPU and devices.
+
+
+
+\subsection{Operating Systems}
+
+
+\subsection{Network Architectures}
+
+
+\subsection{Network \& Security}
+
+
+\subsection{Databases}
+
+
+\subsection{Algorithms \& Data Structures}
+
+
+\subsection{Graph Algorithms}
+
+
+\subsection{Programming}
+
+
+\subsection{Compilers}
+
+
+\subsection{System Engineering}
+
+
+\section{Mathematics}
+
+
+\subsection{Set}
+
+
+\subsection{Logics}
+
+
+\subsection{Linear Algebra}
+
+
+\subsection{Calculus}
+
+
+\subsection{Probability}
+
+
+\subsection{Numerical}
+
+
+\end{document}
