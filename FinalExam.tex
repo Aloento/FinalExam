@@ -19,18 +19,18 @@
 \begin{document}
 
 
-\section{Informatics}
+Informatics
 
 
-\subsection{Processors \& Memories}
+\section{Processors \& Memories}
 
 
-\subsubsection{Von Neumann Principle}
+\subsection{Von Neumann Principle}
 
 程序 和 数据 储存在 单一独立的储存单元 内存 中，它们通过 共同的总线 进行访问。它们在 物理上 是相同的，计算机根据 指令 来处理它们，易重新编程。
 
 
-\subsubsection{Von Neumann Loop}
+\subsection{Von Neumann Loop}
 
 \begin{enumerate}
     \item CPU 从内存中取指令 Fetch
@@ -43,17 +43,17 @@
 重复，直到程序结束。CPU 在获取 指令和数据 之间交替，降低速度。
 
 
-\subsubsection{Von Neumann Architecture}
+\subsection{Von Neumann Architecture}
 
 存储器、运算器、控制器、输入设备和输出设备五部分组成计算机。运算器和控制器合称为中央处理器。
 
 
-\subsubsection{Harvard}
+\subsection{Harvard}
 
 此架构使用 两个不同的储存器 来 分别储存 指令和数据，不同的总线进行访问，速度更快，成本更高。
 
 
-\subsubsection{CISC}
+\subsection{CISC}
 
 Complex / Reduced Instruction Set Computer
 
@@ -62,7 +62,7 @@ Complex / Reduced Instruction Set Computer
 原因：寄存器昂贵，尽可能使单个指令做更多的工作
 
 
-\subsubsection{RISC}
+\subsection{RISC}
 
 精简指令集针对流水线化的处理器优化，指令数目少，周期短，更好的并行执行，编译器的效率更高，便宜节能。
 
@@ -71,29 +71,29 @@ x86 对简单指令有硬件加速。
 ARM V7 和之前没有 AES。
 
 
-\subsubsection{Commands}
+\subsection{Commands}
 
 一组指示处理器执行特定操作的二进制代码，包含 OpCode 和 Operand 两部分，汇编。
 
 
-\subsubsection{Registers}
+\subsection{Registers}
 
 CPU 内部用来存放临时数据的内存，非常快，很小。x86-64架构有 16 个通用寄存器。
 
 CPU $\leftrightarrow$ 寄存器 $\leftrightarrow$ 缓存 $\leftrightarrow$ 内存
 
 
-\subsubsection{Pipeline}
+\subsection{Pipeline}
 
 指令流水线，将每条指令分解为多步，每个阶段可以并行执行不同的指令，从而实现几条指令并行处理。指令仍是一条条顺序执行，一个时钟周期内可以执行一条完整的指令。当一个指令在 Execute 时，另一个指令可以开始执行 Decode，以此类推。
 
 
-\subsubsection{Superscalar}
+\subsection{Superscalar}
 
 在单个核心中有多个流水线，一个时钟周期内执行多个指令，并行地对多条指令进行流水处理。
 
 
-\subsubsection{Memories}
+\subsection{Memories}
 
 \paragraph{按物理结构}
 
@@ -112,9 +112,8 @@ CPU $\leftrightarrow$ 寄存器 $\leftrightarrow$ 缓存 $\leftrightarrow$ 内�
 
     \item[Electrically EPROM] 使用高电场来抹除
 
-    \item[Flash] NAND（SSD）与 NOR（BIOS）型、\\ 寿命有限、较慢
+    \item[Flash] NAND（$!\&$ SSD）与 NOR（$!\|$ BIOS）型、\\ 寿命有限、较慢
 \end{description}
-
 
 \paragraph{按组织方式}
 
@@ -140,12 +139,12 @@ CPU $\leftrightarrow$ 寄存器 $\leftrightarrow$ 缓存 $\leftrightarrow$ 内�
 \end{description}
 
 
-\subsection{Peripherals \& Storage \& I/O}
+\section{Peripherals \& Storage \& I/O}
 
 
-\subsubsection{Storage}
+\subsection{Storage}
 
-\paragraph{By Construction}
+\subsubsection{By Construction}
 
 \begin{description}
     \item[Solid] SSD, Flash 速度快
@@ -155,7 +154,7 @@ CPU $\leftrightarrow$ 寄存器 $\leftrightarrow$ 缓存 $\leftrightarrow$ 内�
     \item[Magnetic] HDD, Tape, Floppy 容量大
 \end{description}
 
-\paragraph{By Operation Principle}
+\subsubsection{By Operation Principle}
 
 \begin{description}
     \item[RAM] Volatile
@@ -164,9 +163,9 @@ CPU $\leftrightarrow$ 寄存器 $\leftrightarrow$ 缓存 $\leftrightarrow$ 内�
 \end{description}
 
 
-\subsubsection{Peripherals}
+\subsection{Peripherals}
 
-\paragraph{By Functionality}
+\subsubsection{By Functionality}
 
 \begin{description}
     \item[Input] Keyboard, Mouse
@@ -178,7 +177,7 @@ CPU $\leftrightarrow$ 寄存器 $\leftrightarrow$ 缓存 $\leftrightarrow$ 内�
     \item[Network] Router, Switch
 \end{description}
 
-\paragraph{By Means}
+\subsubsection{By Means}
 
 \begin{description}
     \item[Wired]
@@ -297,52 +296,54 @@ Interrupt-Request。I/O 需要运算时，向 CPU 发送中断请求，并处理
 \end{description}
 
 
-\subsection{Operating Systems}
+\section{Operating Systems}
 
 
-\subsection{Network Architectures}
 
 
-\subsection{Network \& Security}
+\section{Network Architectures}
 
 
-\subsection{Databases}
+\section{Network \& Security}
 
 
-\subsection{Algorithms \& Data Structures}
+\section{Databases}
 
 
-\subsection{Graph Algorithms}
+\section{Algorithms \& Data Structures}
 
 
-\subsection{Programming}
+\section{Graph Algorithms}
 
 
-\subsection{Compilers}
+\section{Programming}
 
 
-\subsection{System Engineering}
+\section{Compilers}
 
 
-\section{Mathematics}
+\section{System Engineering}
 
 
-\subsection{Set}
+Mathematics
 
 
-\subsection{Logics}
+\section{Set}
 
 
-\subsection{Linear Algebra}
+\section{Logics}
 
 
-\subsection{Calculus}
+\section{Linear Algebra}
 
 
-\subsection{Probability}
+\section{Calculus}
 
 
-\subsection{Numerical}
+\section{Probability}
+
+
+\section{Numerical}
 
 
 \end{document}
