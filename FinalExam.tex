@@ -27,7 +27,7 @@
 
 \subsubsection{Von Neumann Principle}
 
-程序 和 数据 储存在 单一独立的储存单元 内存 中，它们通过 共同的总线 进行访问。它们在 物理上 是相同的，计算机根据 指令 来处理它们，更容易重新编程。
+程序 和 数据 储存在 单一独立的储存单元 内存 中，它们通过 共同的总线 进行访问。它们在 物理上 是相同的，计算机根据 指令 来处理它们，易重新编程。
 
 
 \subsubsection{Von Neumann Loop}
@@ -59,7 +59,7 @@ Complex / Reduced Instruction Set Computer
 
 复杂指令集的每个指令可执行若干低端操作，指令数目多而复杂，周期长，更适合复杂操作，简单操作可能浪费时间。
 
-寄存器昂贵，尽可能使单个指令做更多的工作
+原因：寄存器昂贵，尽可能使单个指令做更多的工作
 
 
 \subsubsection{RISC}
@@ -95,10 +95,10 @@ CPU $\leftrightarrow$ 寄存器 $\leftrightarrow$ 缓存 $\leftrightarrow$ 内�
 
 \subsubsection{Memories}
 
-按物理结构：
+\paragraph{按物理结构}
 
 \begin{description}
-    \item[SRAM] Field-Effect Transistor、无需刷新、极快、昂贵、CPU 缓存
+    \item[SRAM] Field-Effect Transistor、无需刷新、极快、\\ 昂贵、CPU 缓存
 
     \item[DRAM] Capacitance、周期刷新、内存
 
@@ -108,28 +108,28 @@ CPU $\leftrightarrow$ 寄存器 $\leftrightarrow$ 缓存 $\leftrightarrow$ 内�
 
     \item[Erasable PROM] 利用高电压将数据写入，有透明窗口，曝光于紫外线时抹除数据
 
-    \item[OneTime PROM] 与 EPROM 一样，但不设置透明窗
+    \item[OneTime PROM] 与 EPROM 一样，但无透明窗
 
     \item[Electrically EPROM] 使用高电场来抹除
 
-    \item[Flash] NAND（SSD）与 NOR（BIOS）型、寿命有限、较慢
+    \item[Flash] NAND（SSD）与 NOR（BIOS）型、\\ 寿命有限、较慢
 \end{description}
 
 
-按组织方式：
+\paragraph{按组织方式}
 
 \begin{description}
-    \item[Serial] 比如 Magnetic Tape、密度高、速度慢、不能随机存取
+    \item[Serial] 比如 Magnetic Tape、密度高、速度慢、\\ 不能随机存取
 
     \item[Parallel] 比如 Disk、同时读写多个比特
 
-    \item[Distributed] 信息存储于多个独立且互不干扰的设备中、可靠性、扩展性
+    \item[Distributed] 信息存储于多个独立且互不干扰的 \\ 设备中、可靠性、扩展性
 
     \item[Hierarchical] 高效率，比如 Cache -> RAM -> ROM
 \end{description}
 
 
-按访问类型：
+\paragraph{按访问类型}
 
 \begin{description}
     \item[Direct Memory Access] 不经过 CPU，比如显卡的 DirectStorage
@@ -145,7 +145,7 @@ CPU $\leftrightarrow$ 寄存器 $\leftrightarrow$ 缓存 $\leftrightarrow$ 内�
 
 \subsubsection{Storage}
 
-By Construction:
+\paragraph{By Construction}
 
 \begin{description}
     \item[Solid] SSD, Flash 速度快
@@ -155,7 +155,7 @@ By Construction:
     \item[Magnetic] HDD, Tape, Floppy 容量大
 \end{description}
 
-By Operation Principle:
+\paragraph{By Operation Principle}
 
 \begin{description}
     \item[RAM] Volatile
@@ -166,7 +166,7 @@ By Operation Principle:
 
 \subsubsection{Peripherals}
 
-By Functionality:
+\paragraph{By Functionality}
 
 \begin{description}
     \item[Input] Keyboard, Mouse
@@ -178,7 +178,7 @@ By Functionality:
     \item[Network] Router, Switch
 \end{description}
 
-By Means:
+\paragraph{By Means}
 
 \begin{description}
     \item[Wired]
@@ -199,7 +199,7 @@ CPU \leftrightarrow RAM
 
 CPU \leftrightarrow I/O Devices
 
-传输数据，宽度决定一次传输多少比特，常见 8 - 64 bits
+传输数据，宽度决定一次传输多少比特，8 - 64 bits 常见
 
 
 \subsubsection{Address}
@@ -216,6 +216,85 @@ CPU \leftrightarrow I/O Devices
 
 handling is the process of managing the communication between CPU and devices.
 
+
+\subsubsection{Programmed}
+
+最简单，基本，低效率。CPU 直接控制 I/O 设备和 存储器 之间的数据传输
+
+
+\subsubsection{IRQ}
+
+Interrupt-Request。I/O 需要运算时，向 CPU 发送中断请求，并处理需求
+
+
+\subsubsection{Direct Memory Access}
+
+
+\subsection{Protocols}
+
+传输数据的方法
+
+
+\subsubsection{Parallel}
+
+所有信号线在同一时刻传输数据 导致信号互相干扰（串扰）。传输速率提高，时钟同步和时序控制变难。
+
+\begin{description}
+    \item[Centronics] Enhanced Parallel Port 打印机通信，8 位数据总线和几个控制信号，25 PIN
+
+    \item[Peripheral Component Interconnect] 连接外围设备，32 位 133 MB/s
+\end{description}
+
+
+\subsubsection{Serial}
+
+一次传输一比特，数据沿单一信道传输，差分信号降低干扰和提高质量，增加 Lane 数量提升速率。
+
+差分：一正一负两根线，通过电压差获取数据。
+
+\begin{description}
+    \item[Recommended Standard 232] 一条数据线发送接收，控制线用于握手和流量控制，工业
+
+    \item[High-Definition Multimedia Interface] DP
+
+    \item[PCI Express] x32 表示 Lane 数，32 GT/s 每 Lane
+\end{description}
+
+
+\subsubsection{Universal Serial Bus}
+
+同时供电通信，即插即用，40 Gbps，Thunderbolt 兼容
+
+\begin{description}
+    \item[主从通信] Host 管理控制数据传输
+
+    \item[层次结构] ~
+    
+        \begin{itemize}
+            \item 物理：接口形状，功率等
+            \item 链路：建立和维护通信
+            \item 协议：格式等
+            \item 传输：打包数据
+            \item 会话：管理
+            \item 应用：处理驱动程序的请求
+        \end{itemize}
+
+    \item[数据包] 传输的基本单位，Token、Data 和 Handshake
+
+    \item[传输模式] ~
+
+        \begin{itemize}
+            \item Control：设备配置，状态查询，命令执行
+
+            \item Bulk：大量数据，高速，延迟高
+
+            \item Interrupt：低延迟，少量数据，实时，慢，鼠标
+
+            \item Isochronous：音视频，固定速率和延迟，会丢包
+        \end{itemize}
+
+    \item[初始化] 识别设备，查询信息，分配地址，选择配置
+\end{description}
 
 
 \subsection{Operating Systems}
