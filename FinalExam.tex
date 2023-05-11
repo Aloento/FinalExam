@@ -298,6 +298,116 @@ Interrupt-Request。I/O 需要运算时，向 CPU 发送中断请求，并处理
 
 \section{Operating Systems}
 
+管理软硬件的软件，为程序提供基本服务，用户与硬件的中介。
+
+
+\subsection{Classification}
+
+\begin{description}
+    \item[Batch] 自动化执行一系列工作（早期大型计算机）
+
+    \item[Time-Sharing] 多用户共享资源，Time-Slicing，为每个用户分配时间片段，并发使用
+
+    \item[Real-Time] 对事件立即作出反应，错过最后期限时：Hard Failure；Soft Tolerable
+
+    \item[Distributed] 超算集群，多合一
+
+    \item[Embedded] 物联网
+\end{description}
+
+
+\subsection{Functionality}
+
+\begin{description}
+    \item[Process] 管理进程，分配 CPU 时间，优先级
+
+    \item[Memory] 管理虚拟内存，分配内存，内存边界
+
+    \item[File System] 管理空间分配，控制访问，维护完整性
+
+    \item[Device] 管理连接设备，提供标准化接口
+
+    \item[UI] 用户互动，CLI / GUI
+
+    \item[Security] 认证授权
+
+    \item[Networking] 进程间，网络上通信
+
+    \item[Error Handling] 处理错误，保持稳定
+\end{description}
+
+
+\subsection{Process \& Scheduling}
+
+确保资源有效利用，为用户提供灵敏高效的环境
+
+
+\subsubsection{Process Management}
+
+创建，执行，终止
+
+\begin{description}
+    \item[Process] 一个正在执行的程序，由代码、数据和一组资源组成
+
+    \item[Control Block] 包含进程信息，如ID，状态，优先级，内存用量等
+
+    \item[States] 如 ready / running / waiting / terminated
+
+    \item[Scheduler] 根据策略 从就绪队列中 决定哪个进程 应该在指定时间执行
+\end{description}
+
+
+\subsubsection{Scheduling Methods}
+
+\begin{description}
+    \item[First-Come, First-Served] 先到先得，对于交互式不佳，可能有长期运行的进程
+
+    \item[Shortest Job Next] 最小化平均等待时间，有可能导致长进程长等待
+
+    \item[Round Robin] 每个进程都有固定的 Quantum 来执行，用完后会被移到队列后方，平衡了公平和效率，适合交互
+
+    \item[Priority Scheduling] 先执行高优先级，确保响应性
+
+    \item[Multilevel Queue Scheduling] 每个优先级都有独立的队列，与其他方法配合
+
+    \item[Multilevel Feedback Queue] 类似上面，但可以根据进程行为，在不同优先级队列中移动进程，比如 I/O 绑定，动态调整提高效率和响应
+\end{description}
+
+
+\subsubsection{Scheduling in Interactive}
+
+优先考虑前台任务，响应性
+
+\begin{description}
+    \item[Preemptive Scheduling] 抢占式，可中断运行中的进程，把时间分配给更高优先级，及时响应用户输入
+
+    \item[Dynamic Priority Adjustment] 根据行为和资源动态调整优先级，短 CPU 爆发的 I/O 绑定可更优先
+
+    \item[Load Balancing] 在多个 CPU 核心中分配进程，确保没有过载
+
+    \item[Resource Reservation] 为关键进程保留 CPU 时间
+
+    \item[Adaptive Scheduling] 动态调整使用的策略
+\end{description}
+
+
+\subsubsection{Aim \& Requirements}
+
+\begin{description}
+    \item[Fairness] 
+
+    \item[Efficiency] 
+
+    \item[Responsiveness] 
+
+    \item[Predictability] 
+
+    \item[Adaptability] 
+
+    \item[Balancing] 
+
+    \item[Prioritization] 
+\end{description}
 
 
 
