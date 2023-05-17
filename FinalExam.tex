@@ -95,7 +95,8 @@ CPU $\leftrightarrow$ 寄存器 $\leftrightarrow$ 缓存 $\leftrightarrow$ 内�
 
 \subsection{Memories}
 
-\paragraph{按物理结构}
+
+\subsubsection{}{按物理结构}
 
 \begin{description}
     \item[SRAM] Field-Effect Transistor、无需刷新、极快、\\ 昂贵、CPU 缓存
@@ -115,7 +116,8 @@ CPU $\leftrightarrow$ 寄存器 $\leftrightarrow$ 缓存 $\leftrightarrow$ 内�
     \item[Flash] NAND（$!\&$ SSD）与 NOR（$!\|$ BIOS）型、\\ 寿命有限、较慢
 \end{description}
 
-\paragraph{按组织方式}
+
+\subsubsection{按组织方式}
 
 \begin{description}
     \item[Serial] 比如 Magnetic Tape、密度高、速度慢、\\ 不能随机存取
@@ -128,7 +130,7 @@ CPU $\leftrightarrow$ 寄存器 $\leftrightarrow$ 缓存 $\leftrightarrow$ 内�
 \end{description}
 
 
-\paragraph{按访问类型}
+\subsubsection{按访问类型}
 
 \begin{description}
     \item[Direct Memory Access] 不经过 CPU，比如显卡的 DirectStorage
@@ -379,11 +381,11 @@ Interrupt-Request。I/O 需要运算时，向 CPU 发送中断请求，并处理
 优先考虑前台任务，响应性
 
 \begin{description}
-    \item[Preemptive Scheduling] 抢占式，可中断运行中的进程，把时间分配给更高优先级，及时响应用户输入
+    \item[Preemptive Scheduling] 抢占式，可中断运行中的进程，把时间分配给更高优先级，及时响应输入
 
-    \item[Dynamic Priority Adjustment] 根据行为和资源动态调整优先级，短 CPU 爆发的 I/O 绑定可更优先
+    \item[Dynamic Priority Adjustment] 根据行为和资源动态调整优先级，如 CPU 爆发式的 I/O 绑定可更优先
 
-    \item[Load Balancing] 在多个 CPU 核心中分配进程，确保没有过载
+    \item[Load Balancing] 在多个 CPU 核心中分配进程，\\ 确保没有过载
 
     \item[Resource Reservation] 为关键进程保留 CPU 时间
 
@@ -394,24 +396,332 @@ Interrupt-Request。I/O 需要运算时，向 CPU 发送中断请求，并处理
 \subsubsection{Aim \& Requirements}
 
 \begin{description}
-    \item[Fairness] 
+    \item[Fairness] 维持稳定平等，防止垄断
 
-    \item[Efficiency] 
+    \item[Efficiency] 最小化开销，最大化吞吐，减少上下文切换，避免 CPU 饥饿
 
-    \item[Responsiveness] 
+    \item[Responsiveness] 迅速响应高优先级事件
 
-    \item[Predictability] 
+    \item[Predictability] 确保进程在合理的时间内根据优先级和资源需求被执行，实时系统
 
-    \item[Adaptability] 
+    \item[Adaptability] 适应不断变化的系统环境，如变化的负载或新进程加入
+\end{description}
 
-    \item[Balancing] 
 
-    \item[Prioritization] 
+\subsection{Memory}
+
+
+\subsubsection{Management}
+
+有效分配，跟踪，管理内存块，使多个进程共享内存并同时执行，确保每个进程有必要的运行资源，防止碎片，进程隔离
+
+\begin{description}
+    \item[De / Allocation] 需时分配，用完回收，防止泄漏
+
+    \item[Organization] 将内存分为多个部分，分离不同类型的内存，如 code、data、stack，高效
+\end{description}
+
+
+\subsubsection{Relocation}
+
+调整代码和数据所处的内存地址，允许它在不同的位置执行，多个进程有效分享有限的内存
+
+\begin{description}
+    \item[Static] 地址在编译或链接时被调整，产物包含最终的地址，程序只能在特定的地址被加载。简单快速但不灵活，一旦加载就不能移动
+
+    \item[Dynamic] 运行时调整地址。加载到内存时会计算实际位置与参考位置的差异，称之为 Relocation Constant 或 Base Address，被添加到程序中每个内存的引用中。允许多个程序共享同一内存空间而不冲突
+\end{description}
+
+
+\subsubsection{Protection}
+
+防止程序没有授权的情况下访问修改另一个程序的内存，确保系统稳定性，安全性和完整性。它维持进程隔离，保护敏感数据，防止非法操作导致的系统崩溃。
+
+\begin{description}
+    \item[Memory Management Unit] 硬件，将虚拟地址到物理地址。检查进程访问权限，实时内存保护。若有非法访问，则会抛出异常，让操作系统采取行动，如终止进程
+
+    \item[Memory Protection Unit] 硬件，特别是在没有 MMU 或者简单系统中。它定义了具有特定内存访问权限的区域，并检查进程是否有权限
+
+    \item[Virtual Memory] 每个进程都有自己的私有地址空间，与物理层分离，提供额外保护，进程无法直接访问其他内存。OS 管理虚拟内存与物理地址的映射
+
+    \item[Access Control] OS 实现各种访问控制规则，如权限组，以限制进程访问区域
+
+    \item[Address Space Layout Randomization] ~
+    
+    随机化代码与数据在内存中的位置，使攻击者更难预测布局并执行 Buffer Overflows 等攻击
+\end{description}
+
+
+\subsubsection{Swapping}
+
+在 RAM 与 硬盘 之间移动数据以释放 RAM 空间的操作，是虚拟内存管理的关键部分。当 RAM 可用不足时，OS 可能会将一些不常用的数据 swapping out 或 paging out，当再次需要时，会被 in 到 RAM。
+
+Swap 是使用磁盘空间来扩展 RAM 的有效方法，然而会减慢系统速度，所以 OS 使用复杂的算法，根据频率，内存用量等因素决定哪些部分可以且何时进行交换。同时结合硬件，如 Translation Lookaside Buffers 和 MMU 来优化性能。
+
+TLB：CPU 的一种缓存，由 MMU 用于改进虚拟到物理地址的转译速度
+
+
+\subsubsection{Paging}
+
+将虚拟内存划分为固定大小的块，Pages。物理内存也被划分，Frames。它们具有相同大小，通常是 2 的幂。OS 维护 Page Tables，将 Pages 映射到 Frames，供 MMU 查询。
+
+优点：
+
+\begin{description}
+    \item[Efficient Allocation] 通过分块，避免外部碎片，简化操作
+
+    \item[Virtual Memory] 实现的基础
+
+    \item[Protection] 每个进程都有自己的 Page Table，OS 可以为每个 Page 设置权限
+
+    \item[Demand Paging] 只有在实际使用时才加载 Page
+\end{description}
+
+开销：
+
+\begin{description}
+    \item[Management] Page Tables 需要额外内存和处理
+
+    \item[Translation] 映射开销
+
+    \item[Page Faults] 当引用不在物理内存的 Page 会引发，需要 OS 从磁盘加载，比较缓慢
+\end{description}
+
+
+\section{Network Architectures}
+
+
+\subsection{Layers}
+
+
+\subsubsection{Open Systems Interconnection}
+
+\begin{enumerate}
+    \item Physical
+
+    电信号，电压，介质规范
+    
+    \item Data Link
+
+    纠错，流量控制，包含 LLC 和 MAC 两个子层
+
+    \item Network
+
+    不同网络之间的路由和转发，寻址，拥堵控制，数据包排序，IP 在此层
+
+    \item Transport
+
+    可靠端到端传输，错误检查，流量控制，数据分段，TCP 和 UDP
+
+    \item Session
+
+    管理 App 之间的连接，处理中断恢复
+
+    \item Presentation
+
+    处理数据加密，压缩，转换为 App 可理解的格式
+
+    \item Application
+
+    提供接口，高级协议，如 HTTP
+\end{enumerate}
+
+
+\subsubsection{Logical Link Control}
+
+在 一层 和 MAC 层之间提供接口
+
+\begin{description}
+    \item[Multiplexing] 增加一个协议标识符，使多个上层协议共享同一个 MAC
+
+    \item[Error Control] MAC 主要处理错误，但 LLC 也可以重传
+
+    \item[Flow Control] 控制速率，防止缓冲区溢出
+\end{description}
+
+
+\subsubsection{Media Access Control}
+
+管理数据如何在介质上传输
+
+\begin{description}
+    \item[Addressing] 为设备中每一个接口分配一个唯一的硬件地址，48位，用于识别和引导数据流
+
+    \item[Framing] 将来自上层的内容封装，header（控制，MAC地址）、payload、trailer（校验）
+
+    \item[Error Detection] 使用不同算法检测损坏 Frame，丢弃和重传
+
+    \item[Access Control] 避免冲突，有效利用带宽
+\end{description}
+
+
+\subsubsection{TCP/IP}
+
+\begin{enumerate}
+    \item Link (1, 2)
+    \item Internet (3)
+    \item Transport (4)
+    \item Application (5, 6, 7)
+\end{enumerate}
+
+
+\subsection{Hardware}
+
+\begin{description}
+    \item[Network Interfaces] 1，网卡，通过网络介质传输数据，分配 MAC 地址
+
+    \item[Repeaters] 1，中继，放大信号，扩大覆盖范围
+
+    \item[Bridges] 2，桥接，连接两个独立的网段。根据 MAC 地址，创建过滤表以减少不必要的流量，\\ 并转发数据
+
+    \item[Hubs] 1，集线，连接网络中多个设备，并将数据转发给所有连接的设备，没有过滤等功能
+
+    \item[Switches] 2，交换，连接网络中多个设备，根据 MAC 地址转发和过滤，比 Hub 高效
+
+    \item[Routers] 3，路由，连接多个网络并根据 IP 转发，使用路由算法确定最佳路径，提供 NAT，防火墙，QoS等功能
+\end{description}
+
+
+\subsection{Ethernet}
+
+它是有线 Local Area Network (LAN) 技术，局域网通信标准，1 / 2 层。
+
+\begin{description}
+    \item[Topology] 星形结构，设备连接到中央设备，如交换机
+
+    \item[Media] 支持各种介质，Coaxial、Twisted-pair、Fiber-Optic，RJ-45 接口
+
+    \item[Speed] 100 M / 1 G / 10 G 等
+
+    \item[Frame] Preamble, Destination / Source MAC address, EtherType (indicating the payload's protocol), Payload (data), Frame Check Sequence.
+
+    \item[MAC] Carrier Sense Multiple Access with Collision Detection，在传输之前会监听空闲的通道，如果发生多个设备同时传输，则在重试之前会等待一段随机时间
+\end{description}
+
+
+\subsection{802.11 / WiFi}
+
+\begin{description}
+    \item[a] 5 GHz，54 Mbps，不易受干扰，范围小
+
+    \item[b] 2.4 GHz，11 Mbps，易干扰，范围广
+
+    \item[g] 2.4 GHz，54 Mbps
+
+    \item[n] 2.4 and 5 GHz，600 Mbps，四个 Spatial 流，MIMO
+
+    \item[ac] 5 GHz，6.93 Gbps，八个流，Multi-User MIMO，同时向多个设备传输，160 MHz 信道，256-QAM
+
+    \item[ax] 2.4 and 5 GHz，9.6 Gbps，OFDMA，BSS Color
+\end{description}
+
+
+\subsubsection{Multiple Input Multiple Output}
+
+发射端的多个天线各自独立发送信号，同时在接收端用多个天线接收并恢复原信息，多根天线增加吞吐量和范围
+
+
+\subsubsection{Quadrature Amplitude Modulation}
+
+在两个正交载波上进行幅度调制的调制方式，通常是相位差为 90 度的正弦波，星座图上每一个星座点对应发射信号集中的一个信号，星座点数越多，能传输的信息量就越大
+
+
+\subsubsection{Orthogonal Frequency Division Multiple Access}
+
+将高速的数据流分成多个低速数据流，在多个正交子载波上并行传输
+
+
+\subsubsection{Basic Service Set Coloring}
+
+标签，用于区分来自不同网络的信号。在高密度环境中，不同 AP 的信号会相互干扰，降低性能。通过为每个 BSS 分配一个颜色标识，减少相邻无线网络之间的干扰
+
+
+\subsection{Internet Protocol}
+
+不可靠的无连接协议网络协议，不保证交付，不在发送数据前建立连接。第三层，寻址、路由、打包
+
+
+\subsubsection{IPv4}
+
+Header 结构：
+
+\begin{description}
+    \item[Version] 4
+
+    \item[Internet Header Length] 4
+
+    \item[Type of Service] 8
+
+    \item[Total Length] 16
+
+    \item[Identification] 16，Important for Fragmentation and Reassembly
+
+    \item[Flags] 3，—，[1] 保留，[2] 不要分段，[3] 后面还有
+
+    \item[Fragment Offset] 13，—，片段的索引
+
+    \item[Time to Live] 8，在丢弃前最大跳数
+
+    \item[Protocol] 8，TCP 6，UDP 17
+
+    \item[Header Checksum] 16，每一跳都重新计算和校验
+
+    \item[Source IP] 32
+
+    \item[Destination IP] 32
+
+    \item[Options / Padding] var
+\end{description}
+
+
+\subsubsection{IPv6}
+
+IPsec，更好的 QoS，Stateless IP 配置，Multicast and Anycast
+
+定长 Header 结构：
+
+\begin{description}
+    \item[Version] 4，6
+
+    \item[Traffic Class] 8，QoS
+
+    \item[Flow Label] 20，标记具有相同 QoS 的序列
+
+    \item[Payload Length] 16
+
+    \item[Next Header] 8，如 TCP 头
+
+    \item[Hop Limit] 8，TTL
+
+    \item[Source IP] 128
+
+    \item[Destination IP] 128
+\end{description}
+
+
+\subsection{Network Address Translation}
+
+\begin{description}
+    
 \end{description}
 
 
 
-\section{Network Architectures}
+\subsection{Classless Inter-Domain Routing}
+
+
+\subsection{Routing}
+
+
+\subsection{TCP \& UDP}
+
+
+\subsection{Quality of Service}
+
+
+\subsection{Domain Name System}
+
+
 
 
 \section{Network \& Security}
