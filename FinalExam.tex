@@ -701,16 +701,45 @@ IPsec，更好的 QoS，Stateless IP 配置，Multicast and Anycast
 
 \subsection{Network Address Translation}
 
+Types of NAT：
+
 \begin{description}
-    
+    \item[Static] 一对一固定公网
+
+    \item[Dynamic] 一对一动态公网
+
+    \item[Port Address Translation] 常用，共享公网
 \end{description}
 
+NAT Behavior：
+
+\begin{description}
+    \item[Full Cone] 任何外部都可以与映射端口的内部通信
+
+    \item[Restricted Cone] 内部先向外才能通信
+
+    \item[Port Restricted Cone] 相同端口号
+
+    \item[Symmetric] 每一个连接都分配不同的 IP 和 端口
+\end{description}
 
 
 \subsection{Classless Inter-Domain Routing}
 
+Classful 是 A (x.0.0.1) B (x.x.0.1) C (x.x.x.1)
+
+子网掩码用于区分网络和主机部分，255.255.255.0 的二进制表示为 11111111.11111111.11111111.00000000，24 个 1 是网络；8 个 0 是主机，则掩码的前缀长度为 24。所以 192.168.1.1 和 255.255.255.0 的 CIDR 为 192.168.1.1/24
+
 
 \subsection{Routing}
+
+路由，在网络中选择路径来发送网络流量的过程，确保数据包能有效和准确地从源头传递到目的地
+
+路由表，存储通往不同网络目的地路径信息的数据结构，当路由器收到数据包时，它在其路由表中查找目的地IP地址，以确定转发数据包的下一跳，它包含：
+
+\begin{description}
+    \item[Destination Network] 
+\end{description}
 
 
 \subsection{TCP \& UDP}

@@ -1,0 +1,1243 @@
+\documentclass{article}
+
+\usepackage[a4paper, margin=2cm]{geometry}
+
+
+\begin{document}
+
+
+\section{Computer network architectures}
+
+Network layers, the OSI and the TCP/IP model. Role and basic operation principles of computer network hardware (network interfaces, repeaters, bridges, hubs, switches, routers, etc.). Operation and characteristics of Ethernet. The 802.11 standards. The Internet Protocol. IP addresses, NAT, CIDR, IPv6. Routing, routing tables. TCP and UDP. QoS parameters, tools and possibilities of maintaining quality of service. The structure and operation of DNS.
+
+\subsection{Routing, routing tables}
+
+**Routing** is the process of selecting paths in a network along which to send network traffic. Its primary goal is to ensure that data packets are delivered from their source to their destination efficiently and accurately. Routers are the devices responsible for routing and forwarding packets between different networks.
+
+**Routing tables** are data structures used by routers to store information about the paths to different network destinations. When a router receives a data packet, it looks up the destination IP address in its routing table to determine the next hop (i.e., the next router or destination device) to forward the packet. The routing table contains the following essential elements:
+
+1. **Destination network:** The IP address of the destination network or host. In CIDR notation, this is represented as the network address followed by the prefix length, e.g., `192.168.1.0/24`.
+2. **Subnet mask:** The subnet mask associated with the destination network. This helps the router determine the network portion of the IP address.
+3. **Next hop:** The IP address of the next router or device in the path to the destination. The router forwards the packet to this address.
+4. **Interface:** The router's local network interface used to forward the packet to the next hop.
+5. **Metric:** A value that represents the cost or preference of a particular route. Routers use metrics to select the best path when multiple routes exist to the same destination.
+
+There are two primary types of routing:
+
+1. **Static routing:** In static routing, the routes in the routing table are manually configured by a network administrator. Static routes are fixed and do not change unless they are manually updated. This type of routing is suitable for small networks where the topology is simple and stable.
+
+2. **Dynamic routing:** Dynamic routing uses routing protocols to automatically discover and update routes in the routing table. Routers running dynamic routing protocols exchange information about reachable networks and adjust their routing tables accordingly. Dynamic routing is more scalable and can adapt to changes in the network topology, making it suitable for larger and more complex networks.
+
+Some common dynamic routing protocols include:
+
+- RIP (Routing Information Protocol)
+- OSPF (Open Shortest Path First)
+- EIGRP (Enhanced Interior Gateway Routing Protocol)
+- BGP (Border Gateway Protocol)
+
+Routing and routing tables are crucial aspects of IP networks, ensuring that data packets are efficiently and accurately delivered between devices across different networks.
+
+
+\subsubsection{BGP}
+
+Border Gateway Protocol (BGP) is a standardized exterior gateway protocol designed to exchange routing and reachability information between autonomous systems (ASes) on the Internet. An autonomous system is a collection of IP networks and routers under the control of a single organization that presents a common routing policy to the Internet. BGP enables routers within an AS to communicate with routers in other ASes, allowing them to make informed decisions about the best path to forward traffic to a specific IP address.
+
+BGP is classified as a path vector protocol, which means that it maintains information about the entire path to a destination network, represented as a sequence of AS numbers. This allows BGP to prevent routing loops and ensure that routing decisions are based on the complete AS-path information.
+
+**BGP Operation:**
+
+BGP establishes connections between routers, called BGP peers or neighbors, using a reliable transport protocol, typically TCP. The BGP routers exchange routing information, called BGP updates, to build a consistent view of the global Internet routing table.
+
+The main components of BGP operation are:
+
+1. **Establishing BGP sessions:** BGP routers form neighbor relationships with other BGP routers, typically using TCP port 179. The routers exchange OPEN messages to establish the BGP session and periodically send KEEPALIVE messages to maintain the session.
+
+2. **Exchanging routing information:** BGP routers exchange routing information using UPDATE messages. These messages contain information about new routes (prefixes and their attributes), withdrawn routes, and changes to existing routes.
+
+3. **Path selection:** BGP routers use a decision process to select the best path for each destination prefix, based on various attributes attached to the routes. Some of the most important attributes include AS-path length, local preference, Multi-Exit Discriminator (MED), and the origin of the route (IGP, EGP, or incomplete).
+
+4. **Advertising selected routes:** After selecting the best path for a destination prefix, BGP routers advertise the route to their neighbors, unless policies prevent the advertisement. This process continues until all routers have a consistent view of the global routing table.
+
+**BGP Attributes:**
+
+BGP uses a set of attributes to describe routes and make routing decisions. Some of the most common BGP attributes are:
+
+- **AS-path:** A sequence of AS numbers representing the path to the destination network. BGP uses AS-path length as a primary metric for path selection, preferring shorter paths over longer ones.
+- **Next hop:** The IP address of the next-hop router that should be used to reach the destination network.
+- **Local preference:** A local preference value, set by the AS administrator, used to select the preferred exit point for outbound traffic. Higher local preference values are preferred.
+- **MED (Multi-Exit Discriminator):** A metric used to influence the inbound traffic path selection by neighboring ASes. Lower MED values are preferred.
+
+BGP is a crucial component of the Internet's routing infrastructure, enabling routers to exchange routing information and ensure the reachability of IP networks across the globe. Its path vector nature, policy-based routing, and rich set of attributes make it well-suited for managing complex routing scenarios and maintaining the stability of the Internet.
+
+
+\subsection{TCP and UDP}
+
+TCP (Transmission Control Protocol) and UDP (User Datagram Protocol) are two of the most commonly used transport layer protocols in the Internet Protocol (IP) suite. They serve as intermediaries between the application layer and the network layer, providing communication services to applications. While both protocols are used to transmit data across networks, they have different characteristics and are suited for different types of applications.
+
+**TCP (Transmission Control Protocol):**
+
+TCP is a connection-oriented protocol, which means that it establishes a connection between the sender and the receiver before transmitting data. It provides reliable, ordered, and error-checked delivery of data packets. Key features of TCP include:
+
+1. **Reliability:** TCP uses acknowledgements and retransmissions to ensure that all data packets are received correctly. If a packet is lost or damaged during transmission, the receiving device will request a retransmission.
+2. **Error checking:** TCP uses checksums to verify that the data received is not corrupted. If an error is detected, the packet is discarded, and a retransmission is requested.
+3. **Flow control:** TCP employs flow control mechanisms to prevent the sender from overwhelming the receiver with data. This is achieved by adjusting the rate at which data is sent based on the receiver's capacity.
+4. **Connection establishment:** A three-way handshake is used to establish a connection between the sender and the receiver before any data transmission occurs.
+5. **Ordered delivery:** TCP ensures that data packets are delivered in the correct order by assigning sequence numbers to each packet.
+
+TCP is best suited for applications that require high reliability and accurate data transmission, such as file transfers, email, and web browsing.
+
+**UDP (User Datagram Protocol):**
+
+UDP is a connectionless protocol, meaning it does not establish a connection before transmitting data and does not guarantee the delivery of data packets. Key features of UDP include:
+
+1. **Simplicity:** UDP is a simpler protocol than TCP, with fewer features and less overhead. There is no connection setup, error-checking, or flow control.
+2. **Speed:** As a result of its simplicity, UDP is generally faster than TCP, making it suitable for applications where low latency is crucial.
+3. **No guarantee of delivery:** UDP does not use acknowledgements or retransmissions, so there is no guarantee that data packets will be received or delivered in the correct order.
+4. **Multicast and broadcast support:** UDP supports one-to-many and many-to-many communication, making it suitable for multicast and broadcast applications.
+
+UDP is best suited for applications where speed is more important than reliability, such as video streaming, online gaming, and Voice over IP (VoIP) services.
+
+In summary, TCP and UDP are two transport layer protocols with different characteristics. TCP provides reliable, ordered, and error-checked delivery, making it suitable for applications requiring accurate data transmission. In contrast, UDP is a simpler, faster protocol that does not guarantee packet delivery, making it ideal for applications where low latency is more important than reliability.
+
+
+\subsubsection{TCP Header Structure}
+
+A TCP (Transmission Control Protocol) packet, also known as a segment, is the unit of data transmitted over a network using TCP. The structure of a TCP packet consists of a header and a data section. The header contains various fields that provide information for the proper functioning of the TCP protocol, while the data section carries the actual payload being transmitted.
+
+**TCP Header Structure:**
+
+The TCP header has a fixed size of 20 bytes, with an optional field that can extend the header size up to 60 bytes. The header fields are as follows:
+
+1. **Source Port (16 bits):** This field specifies the source port number of the sending device, which is used to identify the application or service generating the traffic.
+
+2. **Destination Port (16 bits):** This field indicates the destination port number of the receiving device, which is used to identify the target application or service.
+
+3. **Sequence Number (32 bits):** The sequence number is used to order the packets and ensure that they are reassembled correctly at the destination. It represents the byte number of the first byte of data in the current packet.
+
+4. **Acknowledgment Number (32 bits):** If the ACK flag is set, this field contains the next sequence number that the sender of the acknowledgment expects to receive. This effectively acknowledges the receipt of all bytes up to, but not including, the specified number.
+
+5. **Data Offset (4 bits):** This field specifies the size of the TCP header in 32-bit words. It's used to determine where the data section begins in the packet.
+
+6. **Reserved (3 bits):** These bits are reserved for future use and should be set to zero.
+
+7. **Flags (9 bits):** These bits represent control flags used to manage the TCP connection. The most commonly used flags are SYN (synchronize), ACK (acknowledge), FIN (finish), and RST (reset).
+
+8. **Window Size (16 bits):** This field indicates the size of the receiving buffer, specifying how many bytes the receiver is willing to accept.
+
+9. **Checksum (16 bits):** The checksum is used for error checking, ensuring that the header and data have not been corrupted during transmission. If the checksum is incorrect, the packet is discarded.
+
+10. **Urgent Pointer (16 bits):** If the URG flag is set, this field indicates the position of urgent data in the packet, relative to the current sequence number.
+
+11. **Options (variable length, optional):** This field can include additional options such as Maximum Segment Size (MSS), window scale factor, or selective acknowledgments. The Options field is optional and can extend the header size beyond the fixed 20 bytes.
+
+12. **Padding (variable length, optional):** Padding is used to ensure that the header ends on a 32-bit boundary. It consists of zeros and is added as needed based on the length of the Options field.
+
+**TCP Data Section:**
+
+The data section follows the TCP header and carries the payload being transmitted. The size of the data section depends on the Maximum Segment Size (MSS) specified during the connection setup, and it can vary from packet to packet.
+
+The structure of a TCP packet is designed to facilitate reliable, ordered, and error-checked delivery of data over a network. By utilizing sequence numbers, acknowledgment numbers, flags, and other fields in the header, TCP can manage the flow of data and ensure that all packets are received correctly and in the proper order.
+
+
+\subsubsection{UDP Header Structure}
+
+A UDP (User Datagram Protocol) packet, also known as a datagram, is the unit of data transmitted over a network using UDP. The structure of a UDP packet is simpler than TCP, as UDP is a connectionless and less-reliable protocol. A UDP packet consists of a header and a data section.
+
+**UDP Header Structure:**
+
+The UDP header has a fixed size of 8 bytes and contains the following fields:
+
+1. **Source Port (16 bits):** This field specifies the source port number of the sending device, which is used to identify the application or service generating the traffic. The source port is optional in UDP and can be set to zero if not used.
+
+2. **Destination Port (16 bits):** This field indicates the destination port number of the receiving device, which is used to identify the target application or service.
+
+3. **Length (16 bits):** The length field specifies the length of the UDP packet, including both the header and the data section, in bytes. The minimum value for this field is 8, which represents an empty data section.
+
+4. **Checksum (16 bits):** The checksum is used for error checking, ensuring that the header and data have not been corrupted during transmission. In IPv4, the checksum is optional and can be set to zero if not used. In IPv6, the use of the checksum is mandatory.
+
+**UDP Data Section:**
+
+The data section follows the UDP header and carries the payload being transmitted. The size of the data section depends on the length of the packet specified in the header's Length field. Note that UDP does not have any built-in mechanisms for segmenting or reassembling large payloads, so it's up to the application or higher-level protocol to handle these tasks if necessary.
+
+The structure of a UDP packet is designed for simplicity and speed, as it does not include many of the features and fields found in a TCP packet. As a result, UDP is well-suited for applications that prioritize low latency and minimal overhead over reliability and guaranteed delivery, such as streaming video, online gaming, and Voice over IP (VoIP).
+
+
+\subsection{QoS parameters, tools and possibilities of maintaining quality of service}
+
+Quality of Service (QoS) refers to the ability of a network to provide a specific level of performance for different types of traffic. It helps prioritize network traffic, ensuring that critical or latency-sensitive applications receive the necessary resources and perform optimally. QoS parameters are used to measure and enforce the desired level of network performance.
+
+Some common QoS parameters include:
+
+1. **Bandwidth:** The amount of data that can be transmitted over a network link per unit of time. It is usually measured in bits per second (bps).
+2. **Latency:** The time it takes for a data packet to travel from the sender to the receiver. Low latency is essential for real-time applications such as video streaming, online gaming, and VoIP.
+3. **Jitter:** The variation in latency between consecutive packets. Low jitter is crucial for applications that require consistent packet delivery, such as VoIP and video streaming.
+4. **Packet loss:** The percentage of data packets that are lost during transmission. High packet loss can lead to poor quality for real-time applications.
+5. **Reliability:** The ability of a network to deliver data packets without errors or disruptions.
+
+There are several tools and techniques available for maintaining and enforcing QoS in networks:
+
+1. **Traffic classification and marking:** Network traffic is classified into different categories based on characteristics such as protocol, source or destination IP address, and port number. Packets are then marked with priority levels, allowing the network to handle them accordingly.
+2. **Traffic shaping and policing:** These techniques involve controlling the rate at which traffic enters or leaves the network, ensuring that bandwidth is allocated fairly among different traffic flows. Traffic shaping buffers excess traffic, while traffic policing discards packets that exceed the allocated rate.
+3. **Congestion management:** When network congestion occurs, congestion management techniques such as Weighted Fair Queuing (WFQ), Class-Based Weighted Fair Queuing (CBWFQ), and Low Latency Queuing (LLQ) are used to prioritize and schedule the transmission of different traffic classes.
+4. **Congestion avoidance:** To prevent network congestion, mechanisms such as Random Early Detection (RED), Weighted Random Early Detection (WRED), and Explicit Congestion Notification (ECN) are employed. These techniques detect and react to congestion before it becomes severe, selectively dropping or notifying packets based on priority.
+5. **Resource Reservation Protocol (RSVP):** RSVP is a signaling protocol used to reserve network resources for specific traffic flows, ensuring that critical applications have the necessary bandwidth and other resources.
+6. **Differentiated Services (DiffServ):** DiffServ is an architecture for providing QoS in IP networks by marking packets with different priority levels in the IP header. Routers and switches use these markings to prioritize and handle traffic accordingly.
+
+Implementing QoS in a network involves configuring routers and switches to enforce the desired traffic prioritization and resource allocation policies. By doing so, network administrators can ensure that critical and latency-sensitive applications receive the necessary resources, resulting in improved performance and user experience.
+
+
+\subsection{The structure and operation of DNS}
+
+The Domain Name System (DNS) is a hierarchical and distributed system used to translate human-readable domain names, such as `www.example.com`, into the IP addresses that computers use to identify each other on the internet, like `192.0.2.1`. DNS is an essential component of the internet infrastructure, as it enables users to access websites and services using easy-to-remember domain names instead of having to remember numerical IP addresses.
+
+**Structure of DNS:**
+
+The DNS hierarchy consists of several components:
+
+1. **Root servers:** At the top of the DNS hierarchy are the root servers. These servers contain information about the top-level domain (TLD) name servers. There are 13 root server clusters, identified by letters A through M, that are distributed globally and operated by various organizations.
+
+2. **Top-level domains (TLDs):** TLDs are the highest level of domain names in the DNS hierarchy, such as `.com`, `.org`, `.net`, and country-code TLDs like `.uk` and `.cn`. TLD name servers are responsible for storing information about the second-level domain name servers under their respective TLDs.
+
+3. **Second-level domains:** These are the domain names directly under a TLD, such as `example.com` or `example.org`. Second-level domain name servers store information about the specific domain, including the IP addresses associated with its subdomains and other resource records.
+
+4. **Subdomains:** Subdomains are subdivisions of a second-level domain, such as `www.example.com` or `mail.example.com`. They can have their own DNS records and can be further divided into lower-level subdomains if necessary.
+
+**Operation of DNS:**
+
+DNS operates using a client-server model. When a user enters a domain name in their web browser or an application tries to resolve a domain name, a DNS query is initiated. The process typically involves the following steps:
+
+1. **DNS resolver:** The client device sends a DNS query to a local DNS resolver, which is typically provided by the user's Internet Service Provider (ISP) or configured manually. The resolver checks its cache to see if it already has the IP address for the requested domain name. If the information is in the cache, the resolver returns the IP address to the client, and the process is complete.
+
+2. **Root server:** If the resolver does not have the information in its cache, it queries one of the root servers. The root server does not provide the IP address for the requested domain but instead returns the address of the TLD name server responsible for the domain's TLD.
+
+3. **TLD name server:** The resolver then queries the TLD name server, which returns the address of the second-level domain's authoritative name server.
+
+4. **Authoritative name server:** Finally, the resolver queries the authoritative name server for the second-level domain. The authoritative name server returns the IP address associated with the requested domain name.
+
+5. **Returning the result:** The resolver stores the IP address in its cache for future use and returns it to the client. The client can now use the IP address to establish a connection with the destination server and request the desired resource.
+
+The DNS system is critical to the functioning of the internet, as it provides a way to translate user-friendly domain names into IP addresses that computers use to communicate with each other. The distributed and hierarchical nature of DNS enables it to scale with the growth of the internet and provide a robust and reliable service.
+
+
+\section{Network and data security}
+
+Data security, service security, physical security. Security risks of the Internet, attack types and methods of defense. Encrypted and unencrypted communication. Classic encryptions, symmetric and public-key cryptography. Key sharing, Diffie-Hellman key exchange. Encryptions and methods for breaking them (social engineering, brute-force attacks, analytical attacks). Firewalls, their types, operation, and functionality. Internal and external network, DMZ, Security of WLAN networks, techniques, risks.
+
+
+\subsection{Data security, service security, physical security}
+
+Network and data security is a critical aspect of managing and protecting information technology (IT) resources, such as computer systems, networks, applications, and data. It encompasses various practices, technologies, and strategies to prevent unauthorized access, misuse, modification, or destruction of sensitive information and IT assets. The following are three key aspects of network and data security:
+
+**1. Data Security:**
+
+Data security involves protecting the integrity, confidentiality, and availability of data, both in transit and at rest. It includes a range of techniques and technologies to prevent unauthorized access, disclosure, or modification of sensitive data. Some common data security measures are:
+
+- Encryption: Using cryptographic algorithms to transform data into a format that can only be read by someone with the correct decryption key.
+- Access controls: Implementing user authentication and authorization mechanisms to restrict access to sensitive data based on the user's identity and role.
+- Data backups: Regularly creating and storing copies of data to ensure its availability and recovery in case of data loss or corruption.
+- Data loss prevention (DLP) tools: Deploying software that monitors and prevents the unauthorized transfer or leakage of sensitive data.
+- Data masking: Hiding sensitive information by replacing it with fictitious data in non-production environments.
+
+**2. Service Security:**
+
+Service security pertains to the protection of IT services, such as applications, APIs, and network services, from threats and vulnerabilities that could lead to unauthorized access or disruption. Some common service security measures are:
+
+- Regular vulnerability scanning and patch management to identify and remediate software vulnerabilities.
+- Implementing secure coding practices and conducting security testing during the software development lifecycle.
+- Deploying firewalls, intrusion detection systems (IDS), and intrusion prevention systems (IPS) to monitor and block malicious network traffic.
+- Employing network segmentation to isolate sensitive systems and services from potentially compromised areas of the network.
+- Implementing secure configurations for networking devices, servers, and applications, following industry best practices and security guidelines.
+
+**3. Physical Security:**
+
+Physical security focuses on protecting IT assets from physical threats, such as theft, damage, or unauthorized access. It involves the use of physical barriers, access controls, and surveillance systems to safeguard critical infrastructure and information resources. Some common physical security measures are:
+
+- Secure facilities: Ensuring that data centers, server rooms, and other critical infrastructure are housed in secure buildings with access controls, surveillance cameras, and alarms.
+- Access control systems: Implementing card readers, biometric scanners, or other authentication mechanisms to restrict entry to authorized personnel only.
+- Security guards: Employing trained security personnel to monitor and patrol facilities, respond to incidents, and enforce security policies.
+- Environmental controls: Installing fire suppression systems, uninterruptible power supplies (UPS), and climate control systems to protect IT assets from environmental hazards.
+- Asset management and tracking: Maintaining an inventory of IT assets and using tracking devices to prevent theft or unauthorized removal.
+
+By addressing data security, service security, and physical security, organizations can build a comprehensive network and data security strategy that safeguards their IT assets and sensitive information from a wide range of threats and vulnerabilities.
+
+
+\subsection{Security risks of the Internet, attack types and methods of defense}
+
+The Internet is an essential part of modern life, but it also exposes users and organizations to various security risks. Understanding these risks, attack types, and defense methods is crucial for maintaining the security and integrity of IT systems and data. Below, we discuss some common security risks, attack types, and defense strategies.
+
+**Security Risks of the Internet:**
+
+1. Data breaches: Unauthorized access to sensitive information, which may lead to identity theft, financial loss, or damage to an organization's reputation.
+2. Malware: Malicious software, such as viruses, worms, Trojans, ransomware, and spyware, designed to infiltrate, damage, or control computer systems and networks.
+3. Phishing and social engineering: Deceptive tactics used to trick users into revealing sensitive information or performing actions that compromise security.
+4. Distributed Denial of Service (DDoS) attacks: Overwhelming a target system or network with traffic to disrupt its normal functioning.
+5. Insider threats: Employees or other trusted individuals abusing their access privileges to compromise IT systems or data.
+
+**Attack Types:**
+
+1. Malware attacks: Involving the distribution and execution of malicious software on the target system, often through email attachments, malicious websites, or software vulnerabilities.
+2. Phishing attacks: Using fraudulent emails or websites to deceive users into revealing sensitive information or credentials.
+3. Man-in-the-middle (MITM) attacks: Intercepting and potentially altering communications between two parties without their knowledge.
+4. Brute force attacks: Attempting to gain unauthorized access to a system by systematically trying all possible combinations of passwords or encryption keys.
+5. SQL injection attacks: Exploiting vulnerabilities in web applications to inject malicious SQL code and manipulate the underlying database.
+
+**Methods of Defense:**
+
+1. Security awareness and training: Educating users about security risks, best practices, and how to identify and respond to potential threats.
+2. Firewall and intrusion detection/prevention systems (IDS/IPS): Deploying network security devices to inspect and filter incoming and outgoing traffic, blocking known threats and suspicious activities.
+3. Regular software updates and patch management: Keeping operating systems, applications, and other software up-to-date to address known security vulnerabilities.
+4. Antivirus and anti-malware software: Installing and maintaining security software to detect, prevent, and remove malware from computer systems.
+5. Strong authentication and access control: Implementing multi-factor authentication (MFA) and role-based access control (RBAC) to limit unauthorized access to sensitive systems and data.
+6. Data encryption: Using encryption technologies to protect sensitive data, both in transit and at rest, from unauthorized access or disclosure.
+7. Network segmentation: Dividing a network into smaller, isolated segments to limit the potential impact of a security breach or attack.
+8. Regular security assessments and penetration testing: Conducting periodic evaluations of IT systems and networks to identify and remediate security vulnerabilities.
+9. Incident response and disaster recovery planning: Establishing procedures and plans to detect, respond to, and recover from security incidents and minimize their impact.
+
+By understanding and addressing the security risks of the Internet, organizations and users can reduce their exposure to cyber threats and maintain the confidentiality, integrity, and availability of their IT systems and data.
+
+
+\subsection{Encrypted and unencrypted communication. Classic encryptions, symmetric and public-key cryptography}
+
+Communications over the Internet can be either encrypted or unencrypted. Encryption is the process of converting plaintext data into ciphertext, using a cryptographic algorithm and a secret key, to protect the data from unauthorized access or tampering. Unencrypted communication, on the other hand, involves transmitting data in plaintext, making it vulnerable to eavesdropping and interception.
+
+**Classic Encryptions:**
+
+Classic encryption techniques, also known as historical or traditional ciphers, were used before the advent of modern cryptography. These methods are generally simple and can be easily broken with modern computing power. Some examples of classic encryption techniques include:
+
+1. Caesar cipher: A substitution cipher where each letter in the plaintext is replaced by a letter some fixed number of positions down the alphabet.
+2. Vigenère cipher: A polyalphabetic substitution cipher that uses a keyword to shift the letters of the plaintext by varying amounts, depending on the keyword.
+3. Transposition cipher: A cipher that rearranges the order of the characters in the plaintext, according to a specific algorithm or key.
+
+**Symmetric Cryptography:**
+
+Symmetric cryptography, also known as secret-key or private-key cryptography, involves the use of a single key for both encryption and decryption. The sender and the receiver must both have access to the same secret key in order to communicate securely. Some examples of widely used symmetric encryption algorithms include:
+
+1. Advanced Encryption Standard (AES): A block cipher that supports key sizes of 128, 192, or 256 bits and is widely used for secure data transmission and storage.
+2. Data Encryption Standard (DES): An older block cipher that uses a 56-bit key and has been largely replaced by AES due to its vulnerability to brute-force attacks.
+3. Triple DES (3DES): An extension of DES that applies the DES algorithm three times with different keys, providing a higher level of security.
+
+Symmetric cryptography is generally fast and efficient, making it suitable for bulk data encryption. However, key management and secure key distribution can be challenging, particularly when communicating with multiple parties.
+
+**Public-Key Cryptography:**
+
+Public-key cryptography, also known as asymmetric cryptography, uses a pair of keys: a public key and a private key. The public key is used for encryption, while the private key is used for decryption. The public key can be freely shared, while the private key must be kept secret by its owner. Some examples of widely used public-key cryptography algorithms include:
+
+1. RSA (Rivest-Shamir-Adleman): An asymmetric algorithm based on the mathematical properties of large prime numbers, commonly used for secure data transmission, digital signatures, and key exchange.
+2. Elliptic Curve Cryptography (ECC): A form of public-key cryptography based on the algebraic structure of elliptic curves, offering similar security to RSA with shorter key lengths, which can result in faster computations and lower power consumption.
+3. Diffie-Hellman key exchange: A cryptographic protocol that allows two parties to establish a shared secret key over an insecure channel, which can then be used for symmetric encryption.
+
+Public-key cryptography solves the key distribution problem, as only the public key needs to be shared, and it can be done securely over an insecure channel. However, asymmetric algorithms are generally slower and require more computational resources compared to symmetric algorithms.
+
+In practice, many secure communication systems use a combination of symmetric and public-key cryptography. For example, they might use public-key cryptography for key exchange and authentication, and then switch to symmetric cryptography for encrypting the actual data. This approach combines the benefits of both cryptographic techniques, ensuring secure communication while maintaining efficiency.
+
+
+\subsection{Key sharing, Diffie-Hellman key exchange}
+
+Key sharing is the process of securely exchanging cryptographic keys between two parties, allowing them to establish a secret key that can be used for secure communication. One of the most well-known and widely used key sharing protocols is the Diffie-Hellman key exchange.
+
+**Diffie-Hellman Key Exchange:**
+
+The Diffie-Hellman key exchange is a cryptographic protocol that enables two parties, Alice and Bob, to each generate a public-private key pair and exchange their public keys over an insecure channel to establish a shared secret key. This shared secret key can then be used for symmetric encryption, ensuring secure communication between Alice and Bob.
+
+Here's a simplified explanation of how the Diffie-Hellman key exchange works:
+
+1. Alice and Bob agree on two large prime numbers, `p` and `g`, which will serve as the base parameters for the protocol. These numbers can be publicly known and do not need to be kept secret.
+2. Alice generates a private key `a`, which is a random number between 1 and `p-1`. She then computes her public key `A` using the formula `A = g\^a mod p`.
+3. Bob generates his private key `b`, also a random number between 1 and `p-1`. He computes his public key `B` using the formula `B = g\^b mod p`.
+4. Alice and Bob exchange their public keys `A` and `B` over an insecure channel. An eavesdropper may intercept these public keys, but they cannot derive the private keys `a` or `b`.
+5. Alice computes the shared secret key `K` using the formula `K = B\^a mod p`.
+6. Bob computes the same shared secret key `K` using the formula `K = A\^b mod p`.
+7. Due to the mathematical properties of modular exponentiation, both Alice and Bob will arrive at the same value for `K`, even though they used different private keys in the computation. This shared secret key `K` can now be used for symmetric encryption.
+
+The security of the Diffie-Hellman key exchange relies on the difficulty of solving the discrete logarithm problem, which is considered computationally infeasible for large prime numbers. However, it is important to note that the Diffie-Hellman key exchange only provides security for key establishment and does not offer authentication. To provide authentication, the protocol can be combined with digital signatures or other authentication mechanisms.
+
+Elliptic Curve Diffie-Hellman (ECDH) is a variant of the Diffie-Hellman key exchange that uses elliptic curve cryptography (ECC) instead of modular arithmetic. ECDH offers similar security to the original Diffie-Hellman protocol but with shorter key lengths, resulting in faster computations and lower power consumption.
+
+
+\subsection{Encryptions and methods for breaking them (social engineering, brute-force attacks, analytical attacks)}
+
+Encryption is the process of converting plaintext data into ciphertext using a cryptographic algorithm and a secret key, making it unreadable to unauthorized parties. However, various methods can be employed to break encryption and gain access to the protected data. Some common methods for breaking encryption include:
+
+1. **Social engineering:** This approach involves manipulating or deceiving people into revealing sensitive information, such as encryption keys, passwords, or other credentials. Social engineering attacks often involve phishing emails, pretexting, or other forms of psychological manipulation. While not a direct attack on the encryption itself, social engineering can be effective in bypassing encryption by obtaining the necessary keys or credentials from a human target.
+
+2. **Brute-force attacks:** A brute-force attack involves systematically trying all possible combinations of keys or passwords until the correct one is found. The success of brute-force attacks depends on the key length and the computational resources available to the attacker. Modern encryption algorithms like AES with a 256-bit key length are considered resistant to brute-force attacks due to the astronomical number of possible key combinations. However, weak or short passwords can still be susceptible to brute-force attacks.
+
+3. **Analytical attacks:** These attacks target weaknesses in the encryption algorithms or their implementation. Analytical attacks can be categorized as follows:
+
+   a. **Cryptanalysis:** This involves analyzing the encryption algorithm and attempting to find weaknesses or patterns that can be exploited to decrypt the ciphertext without the key. Successful cryptanalysis may involve discovering a flaw in the algorithm, exploiting a known vulnerability, or finding a more efficient method for solving the underlying mathematical problem.
+   
+   b. **Side-channel attacks:** These attacks exploit information leaked through physical or computational side-effects during the encryption or decryption process. Examples of side-channel attacks include timing attacks, power analysis attacks, and electromagnetic analysis attacks. By measuring and analyzing these side-effects, an attacker may be able to extract the encryption key or other sensitive information.
+   
+   c. **Implementation attacks:** These attacks exploit vulnerabilities in the software or hardware implementation of the encryption algorithm. Examples include buffer overflow attacks, fault injection attacks, and insecure random number generation. Implementation attacks can often be mitigated by following secure coding practices and regularly updating software to patch known vulnerabilities.
+
+To protect against these attacks, it is important to use strong encryption algorithms with long key lengths, follow secure coding practices, regularly update software, and educate users about the risks of social engineering. Additionally, implementing multi-factor authentication (MFA) and monitoring for unusual activity can help detect and prevent unauthorized access to encrypted data.
+
+
+\subsection{Firewalls, their types, operation, and functionality}
+
+A firewall is a network security device that monitors incoming and outgoing network traffic and decides whether to allow or block specific traffic based on a set of predefined rules. Firewalls act as barriers between trusted internal networks and untrusted external networks, such as the Internet, to protect networked devices and data from unauthorized access and malicious activities.
+
+There are several types of firewalls, each with its own operation and functionality:
+
+1. **Packet-filtering firewalls:** These firewalls operate at the network layer (Layer 3) of the OSI model and examine each packet's header information, such as source and destination IP addresses, ports, and protocols. Based on the defined rules, the firewall either allows or denies the packet. Packet-filtering firewalls are fast and efficient but may not offer deep inspection or protection against more sophisticated attacks.
+
+2. **Stateful firewalls:** Also known as stateful inspection firewalls, these firewalls operate at the network layer and can track the state of active connections. They not only examine packet headers but also maintain a state table that records information about ongoing connections. Stateful firewalls allow or deny packets based on connection state, providing more granular control and better security than packet-filtering firewalls.
+
+3. **Application-layer firewalls:** Also called proxy firewalls, these firewalls operate at the application layer (Layer 7) of the OSI model. They can inspect the content of network traffic and make filtering decisions based on application-specific criteria, such as HTTP headers, URLs, or email content. Application-layer firewalls offer more in-depth inspection and can detect application-level attacks, but they can also introduce latency due to the increased processing overhead.
+
+4. **Next-generation firewalls (NGFWs):** These firewalls combine features of traditional firewalls with advanced security capabilities, such as intrusion prevention systems (IPS), deep packet inspection (DPI), and application awareness. NGFWs can identify and control traffic based on applications, users, and devices, providing granular visibility and control over network traffic. They also integrate with threat intelligence feeds and other security tools, offering comprehensive network security.
+
+5. **Software-based firewalls:** These firewalls are installed on individual devices, such as desktops, laptops, or servers, and protect the device from unauthorized access and malicious activities. Software-based firewalls can be configured to control both inbound and outbound traffic and are especially useful for providing host-level protection.
+
+6. **Hardware-based firewalls:** These firewalls are standalone appliances that are installed at the network perimeter, typically between the internal network and the Internet. Hardware-based firewalls offer high performance and are designed to handle large volumes of network traffic with minimal impact on network latency.
+
+Firewalls are an essential part of network security and help protect devices and data from unauthorized access, malware, and other threats. To maintain effective network security, organizations should regularly update firewall rules and configurations, monitor network traffic for signs of suspicious activity, and integrate firewalls with other security tools, such as intrusion detection and prevention systems, antivirus software, and threat intelligence feeds.
+
+
+\subsection{Internal and external network, DMZ, Security of WLAN networks, techniques, risks}
+
+**Internal and External Networks:**
+
+- **Internal network** refers to the network infrastructure within an organization or private environment. It usually consists of devices like computers, servers, printers, and other networking equipment that are used by authorized users to access resources within the organization. Internal networks are typically protected by firewalls and other security measures to prevent unauthorized access from external sources.
+
+- **External network** refers to any network outside the organization's internal network, such as the Internet or other organizations' networks. Communication between an internal and external network is typically mediated by firewalls, routers, or other security devices to ensure that unauthorized access and malicious activities are prevented.
+
+**DMZ (Demilitarized Zone):**
+
+A DMZ is a network segment that acts as a buffer between the internal network and the external network (usually the Internet). It contains publicly accessible resources like web servers, mail servers, and other services that need to be accessible from the Internet while keeping the internal network secure. By placing these resources in the DMZ, organizations can minimize the risk of unauthorized access to their internal networks, as attackers would need to breach multiple layers of security to access the internal network.
+
+**Security of WLAN (Wireless Local Area Network) Networks:**
+
+WLAN networks are susceptible to various security risks due to the nature of wireless communication. Some common techniques to secure WLAN networks include:
+
+1. **Encryption:** Use strong encryption protocols such as WPA3 or WPA2-AES to encrypt wireless traffic, making it difficult for attackers to intercept and decipher communication.
+
+2. **SSID hiding:** Disable SSID (Service Set Identifier) broadcasting to make it harder for unauthorized users to find and connect to the network. However, this does not provide strong security, as the SSID can still be discovered using specialized tools.
+
+3. **MAC address filtering:** Restrict network access to devices with specific MAC addresses to prevent unauthorized devices from connecting to the WLAN. This method can be time-consuming to manage and does not guarantee security, as MAC addresses can be spoofed.
+
+4. **Strong passwords:** Use complex and unique passwords for both the WLAN and the administrative interface of the wireless access point (AP) to prevent unauthorized access.
+
+5. **Regular updates:** Keep firmware and software on wireless access points and other network devices up-to-date to patch known vulnerabilities and improve security.
+
+6. **VPN (Virtual Private Network):** Encourage users to connect to the WLAN through a VPN to ensure that their data is encrypted and secure, even if the WLAN itself is compromised.
+
+**Risks Associated with WLAN Networks:**
+
+1. **Unauthorized access:** Attackers may gain access to the WLAN and exploit network resources, steal data, or launch attacks on other devices.
+
+2. **Eavesdropping:** Attackers may intercept and analyze wireless traffic to capture sensitive information, such as login credentials, personal data, or corporate information.
+
+3. **Rogue access points:** Unauthorized or misconfigured access points may be installed within the network, allowing attackers to capture traffic or gain unauthorized access to the network.
+
+4. **Man-in-the-middle attacks:** Attackers may intercept and modify wireless traffic between the user and the access point, potentially capturing sensitive information or injecting malicious data.
+
+5. **Denial of service (DoS) attacks:** Attackers may flood the WLAN with traffic or exploit vulnerabilities in the network infrastructure, causing the WLAN to become unavailable for legitimate users.
+
+To mitigate these risks, organizations should implement robust WLAN security measures, monitor network traffic for signs of suspicious activity, and regularly review and update security policies and configurations.
+
+
+\section{Databases}
+
+Data models. Main elements of entity-relation models. Mathematical background of relational data models (the concept of a relation, operations with relations). Dependencies, dependency sets. Relational data modeling from entity-relation models. Normal forms (1-4, Boyce-Codd), database normalizations. Properties and the syntax of the SQL language, DDL, DML, DCL.
+
+
+\section{Algorithms and data structures}
+
+The concept of algorithms, the description of an algorithm. Turing machines, the halting problem. Efficiency of algorithms, basics of complexity theory. Approaches to algorithm construction. Linear data structures (lists, collections, FIFO and LIFO stacks, binary heap) and their operations (sorting). Search in hash tables. Search based on binary trees. Search, insertion, deletion, balancing. Applications of B-trees in large databases.
+
+
+\subsection{Linear data structures (lists, collections, FIFO and LIFO stacks, binary heap)}
+
+Linear data structures are those in which elements are organized in a sequential manner, and each element has a unique predecessor and successor (except for the first and last elements). Here is an overview of some common linear data structures and related concepts:
+
+1. **Lists**: Lists are collections of elements where each element has a specific position. Lists can be implemented using arrays or linked lists. They provide basic operations such as inserting, deleting, and searching for elements.
+
+2. **Collections**: The term "collection" is often used generically to refer to any data structure that stores a group of elements. Lists, sets, and maps are all examples of collections. The term is also used in the context of programming languages like Java or C#, where "Collections" is a framework providing various data structures and algorithms to manipulate data.
+
+3. **FIFO (First-In-First-Out) Stacks**: These are also known as queues. Queues are linear data structures that follow the First-In-First-Out (FIFO) principle, meaning that the element that is added first will be removed first. Queues support two primary operations: enqueue (add an element to the rear of the queue) and dequeue (remove the front element from the queue). Queues can be implemented using arrays or linked lists.
+
+4. **LIFO (Last-In-First-Out) Stacks**: These are simply called stacks. Stacks are linear data structures that follow the Last-In-First-Out (LIFO) principle, meaning that the element that is added last will be removed first. Stacks have two primary operations: push (add an element to the top of the stack) and pop (remove the top element from the stack). Stacks can be implemented using arrays or linked lists.
+
+5. **Binary Heap**: A binary heap is a complete binary tree that satisfies the heap property, which means that for every node i in the tree, the value of the parent node is either less than or equal to (in a min-heap) or greater than or equal to (in a max-heap) the value of its children. A binary heap can be used to efficiently implement a priority queue, which is a queue where elements are dequeued based on their priority. Although binary heaps are typically visualized as trees, they are usually implemented using arrays for efficiency.
+
+These linear data structures and concepts have a wide range of applications in computer science and are used to solve various problems depending on their specific properties and characteristics.
+
+
+\subsubsection{Binary Heap}
+
+A binary heap is a complete binary tree that satisfies the heap property. It is a specialized data structure used for efficiently implementing priority queues and various algorithms, such as Heap Sort. A binary heap can be classified into two types:
+
+1. **Min-Heap**: In a min-heap, the parent node has a value less than or equal to its children. The smallest element is at the root of the tree.
+2. **Max-Heap**: In a max-heap, the parent node has a value greater than or equal to its children. The largest element is at the root of the tree.
+
+A binary heap has the following properties:
+
+- It is a complete binary tree, meaning all levels are fully filled except possibly for the last level, which is filled from left to right.
+- The height of the binary heap is O(log n), where n is the number of elements in the heap.
+
+Although binary heaps are typically visualized as trees, they are usually implemented using arrays for efficiency. The array representation has the following relationship between parent and child nodes:
+
+- For a given node at index `i`, its left child is located at index `2 * i + 1`, and its right child is located at index `2 * i + 2`.
+- For a given node at index `i`, its parent is located at index `(i - 1) / 2` (integer division).
+
+Common operations associated with binary heaps include:
+
+1. **Insert**: Adds a new element to the heap while maintaining the heap property. The new element is initially added to the end of the array, and then it is "bubbled up" to its correct position by repeatedly swapping it with its parent until the heap property is satisfied. The time complexity of this operation is O(log n).
+
+2. **Extract Minimum (Min-Heap) or Maximum (Max-Heap)**: Removes and returns the smallest (min-heap) or largest (max-heap) element from the heap. This is typically the root element. After removing the root element, the last element in the array is moved to the root position, and then it is "bubbled down" to its correct position by repeatedly swapping it with the smallest (min-heap) or largest (max-heap) child until the heap property is satisfied. The time complexity of this operation is O(log n).
+
+3. **Peek Minimum (Min-Heap) or Maximum (Max-Heap)**: Returns the smallest (min-heap) or largest (max-heap) element without removing it from the heap. This operation takes constant time, O(1), as it only needs to return the root element.
+
+4. **Heapify**: Builds a binary heap from an unsorted array. This operation can be done in-place and has a time complexity of O(n).
+
+Binary heaps are used in various applications, such as implementing priority queues, the Heap Sort algorithm, and Dijkstra's shortest path algorithm.
+
+
+\subsection{Search in hash tables}
+
+Hash tables, also known as hash maps or dictionaries, are data structures that store key-value pairs and provide fast access to values based on their keys. They use a hash function to map the keys to indices in an underlying array (called the hash table), where the corresponding values are stored. Searching for a value in a hash table is a two-step process:
+
+1. **Compute the hash value**: Apply the hash function to the key to obtain a hash value (an integer). The hash function should distribute the keys uniformly across the array to minimize collisions (when two different keys have the same hash value).
+
+2. **Find the value**: Use the hash value as an index to look up the value in the hash table. If the key is present, its corresponding value will be stored at that index.
+
+The primary advantage of hash tables is their efficiency. When the hash function distributes keys uniformly and there are no collisions, searching, inserting, and deleting key-value pairs in a hash table have an average-case time complexity of O(1). However, in the worst case, if all keys collide and end up in the same index, these operations can take O(n) time, where n is the number of keys.
+
+To handle collisions, there are several techniques:
+
+1. **Separate chaining**: Each index in the hash table contains a linked list (or another data structure) to store key-value pairs that collide. When searching for a key, the hash table directs you to the correct index, and then you search the linked list for the key. Separate chaining is simple to implement, but it requires additional memory for the linked lists.
+
+2. **Open addressing**: In this approach, when a collision occurs, the hash table looks for the next available slot (using a probing sequence) to store the key-value pair. Linear probing, quadratic probing, and double hashing are common methods for generating probing sequences. Open addressing avoids the memory overhead of separate chaining but can suffer from performance issues when the load factor (the ratio of the number of stored key-value pairs to the size of the hash table) becomes high.
+
+In practice, hash tables are widely used in various applications, such as symbol tables in compilers, caches, and databases, because they provide fast access to values based on their keys.
+
+
+\subsection{Search based on binary trees}
+
+Searching in binary trees is an important operation in various tree-based data structures. Here, we will discuss three commonly used binary tree structures and their search algorithms:
+
+1. **Binary Search Tree (BST)**: A BST is a binary tree with the property that for each node, all nodes in its left subtree have values less than the node's value, and all nodes in its right subtree have values greater than the node's value. To search for a value in a BST, start at the root and follow these steps:
+
+   - If the current node is null, the value is not in the tree.
+   - If the current node's value equals the target value, the value has been found.
+   - If the target value is less than the current node's value, search in the left subtree.
+   - If the target value is greater than the current node's value, search in the right subtree.
+
+   Repeat these steps until the value is found or the search reaches a null node. The average-case time complexity of searching in a balanced BST is O(log n), but in the worst case (when the tree is completely unbalanced, resembling a linked list), it can take O(n) time.
+
+2. **AVL Tree**: An AVL tree is a self-balancing BST that maintains a balance factor for each node (the difference between the heights of its left and right subtrees). The balance factor is always -1, 0, or 1. Whenever an insertion or deletion operation causes the balance factor of a node to be outside this range, the tree performs rotations to restore balance. Searching in an AVL tree follows the same algorithm as searching in a BST, but because the tree is always balanced, the time complexity is guaranteed to be O(log n).
+
+3. **Red-Black Tree**: A red-black tree is another self-balancing BST that uses a set of rules (red-black properties) to maintain balance. Each node in a red-black tree is colored either red or black, and the tree must satisfy these red-black properties:
+
+   - Every node is either red or black.
+   - The root node is black.
+   - Every leaf node (null) is black.
+   - If a node is red, both its children are black.
+   - Every path from a node to its descendant leaf nodes contains the same number of black nodes.
+
+   Insertion and deletion operations in a red-black tree maintain these properties by performing rotations and recoloring nodes. Searching in a red-black tree follows the same algorithm as searching in a BST, with a guaranteed time complexity of O(log n) due to the balanced nature of the tree.
+
+In summary, searching in binary tree data structures like BST, AVL tree, and red-black tree involves traversing the tree based on the comparison between the target value and node values. Self-balancing trees like AVL and red-black trees guarantee O(log n) time complexity for search, insertion, and deletion operations.
+
+
+\subsection{Search, insertion, deletion, balancing}
+
+In this response, we'll discuss the search, insertion, deletion, and balancing operations for two common self-balancing binary search trees (BSTs): AVL trees and red-black trees.
+
+**AVL Tree:**
+
+1. **Search**: Searching in an AVL tree is the same as searching in a regular BST. The time complexity of searching in an AVL tree is O(log n) because it is always balanced.
+
+2. **Insertion**: To insert a new element in an AVL tree, follow these steps:
+
+   - Perform a regular BST insertion.
+   - Update the height of the affected nodes.
+   - Check for any imbalance in the tree (a balance factor of -2, 0, or 2). If any imbalance is found, perform rotations to rebalance the tree.
+
+   The time complexity of insertion in an AVL tree is O(log n).
+
+3. **Deletion**: To delete an element from an AVL tree, follow these steps:
+
+   - Perform a regular BST deletion.
+   - Update the height of the affected nodes.
+   - Check for any imbalance in the tree (a balance factor of -2, 0, or 2). If any imbalance is found, perform rotations to rebalance the tree.
+
+   The time complexity of deletion in an AVL tree is O(log n).
+
+4. **Balancing**: AVL trees use rotations to maintain balance after insertion or deletion operations. There are four types of rotations: single right rotation, single left rotation, right-left rotation (a combination of right rotation followed by left rotation), and left-right rotation (a combination of left rotation followed by right rotation). The appropriate rotation type depends on the specific imbalance in the tree.
+
+**Red-Black Tree:**
+
+1. **Search**: Searching in a red-black tree is the same as searching in a regular BST. The time complexity of searching in a red-black tree is O(log n) because it is always balanced.
+
+2. **Insertion**: To insert a new element in a red-black tree, follow these steps:
+
+   - Perform a regular BST insertion, with the new node colored red.
+   - Fix any red-black violations in the tree caused by the insertion, using rotations and recoloring.
+
+   The time complexity of insertion in a red-black tree is O(log n).
+
+3. **Deletion**: To delete an element from a red-black tree, follow these steps:
+
+   - Perform a regular BST deletion.
+   - Fix any red-black violations in the tree caused by the deletion, using rotations and recoloring.
+
+   The time complexity of deletion in a red-black tree is O(log n).
+
+4. **Balancing**: Red-black trees use rotations and recoloring to maintain the red-black properties after insertion or deletion operations. The specific steps to fix red-black violations depend on the relationship between the affected nodes (parent, sibling, and uncle) and their colors.
+
+In summary, search, insertion, and deletion operations in both AVL trees and red-black trees have a time complexity of O(log n) due to their balanced nature. AVL trees are more strictly balanced than red-black trees and may require more rotations, making them slightly slower for insertion and deletion operations. However, AVL trees can have faster search times in practice. On the other hand, red-black trees are more efficient for insertion and deletion operations, making them a better choice for certain applications, such as language libraries and databases.
+
+
+\subsection{balancing}
+
+Balancing is the process of adjusting a binary search tree (BST) to maintain its height as minimal as possible to ensure optimal performance for search, insertion, and deletion operations. In a balanced tree, the difference in heights between the left and right subtrees of any node is small, typically 1 or less. Balancing is crucial in self-balancing BSTs, such as AVL trees and red-black trees, to ensure O(log n) time complexity for their operations.
+
+Here's an overview of balancing in AVL trees and red-black trees:
+
+**AVL Trees:**
+
+AVL trees use rotations to maintain balance. The balance factor of a node is the difference between the heights of its left and right subtrees. In an AVL tree, the balance factor of every node must be -1, 0, or 1. If an insertion or deletion operation results in a balance factor outside this range, rotations are performed to restore balance. There are four types of rotations in AVL trees:
+
+1. **Single Right Rotation (LL rotation)**: Occurs when the left subtree of the left child of a node is taller.
+2. **Single Left Rotation (RR rotation)**: Occurs when the right subtree of the right child of a node is taller.
+3. **Right-Left Rotation (RL rotation)**: Occurs when the right subtree of the left child of a node is taller. This rotation is a combination of a right rotation followed by a left rotation.
+4. **Left-Right Rotation (LR rotation)**: Occurs when the left subtree of the right child of a node is taller. This rotation is a combination of a left rotation followed by a right rotation.
+
+**Red-Black Trees:**
+
+Red-black trees use both rotations and recoloring to maintain the red-black properties, which ensure balance. After an insertion or deletion operation, red-black tree balancing involves fixing any violations of the red-black properties:
+
+1. Every node is either red or black.
+2. The root node is black.
+3. Every leaf node (null) is black.
+4. If a node is red, both its children are black.
+5. Every path from a node to its descendant leaf nodes contains the same number of black nodes.
+
+To fix these violations, the tree may perform single or double rotations, as well as recoloring of nodes. The specific steps to fix violations depend on the relationship between the affected nodes (parent, sibling, and uncle) and their colors.
+
+In summary, balancing is a crucial aspect of self-balancing binary search trees like AVL trees and red-black trees. It ensures that the tree remains balanced, providing optimal performance for search, insertion, and deletion operations. Balancing is achieved through rotations and, in the case of red-black trees, recoloring of nodes.
+
+
+\subsection{Applications of B-trees in large databases.}
+
+B-trees are a popular data structure used in large databases and filesystems due to their efficient search, insertion, and deletion operations and their ability to handle large amounts of data. A B-tree is a balanced multiway search tree where each node can have multiple children (as opposed to binary search trees, which have only two children per node).
+
+The key features of B-trees that make them suitable for large databases are:
+
+1. **Balanced structure**: B-trees guarantee a logarithmic height, ensuring that search, insertion, and deletion operations have a time complexity of O(log n). This property is critical for maintaining performance as the size of the database grows.
+
+2. **High fan-out**: Each node in a B-tree can have multiple children, which reduces the height of the tree compared to binary trees. A high branching factor (the number of children per node) allows B-trees to store large amounts of data while keeping the tree height relatively small. This results in fewer disk accesses, which is crucial for large databases stored on disk.
+
+3. **Efficient disk access**: B-trees are designed to minimize disk access since disk I/O is typically much slower than in-memory operations. B-trees are optimized to read or write an entire node (containing multiple keys and pointers) in a single disk access. This reduces the number of disk operations required for search, insertion, and deletion operations.
+
+4. **Support for range queries**: B-trees store keys in a sorted order within each node and across the entire tree, which enables efficient range queries. A range query retrieves all records with keys within a specified range. In a B-tree, this operation can be performed using a single tree traversal.
+
+Some common applications of B-trees in large databases include:
+
+1. **Indexing**: B-trees are often used as index structures in databases, allowing for fast retrieval of records based on their keys. Database systems like MySQL, PostgreSQL, and SQLite use B-trees (or B-tree variants) for their primary indexing mechanism.
+
+2. **Filesystems**: Some filesystems, like the HFS+ (Mac OS) and NTFS (Windows), use B-trees or B-tree variants (like B+ trees) to organize their directory structures and manage file allocation. This ensures efficient file storage and retrieval operations.
+
+3. **NoSQL databases**: B-trees are used in various NoSQL databases, like CouchDB and HBase, which require efficient key-value storage and retrieval. B-trees provide a scalable and efficient solution for these databases.
+
+In summary, B-trees are a critical data structure for large databases due to their balanced structure, high fan-out, efficient disk access, and support for range queries. They are widely used in indexing, filesystems, and NoSQL databases to maintain performance as the size of the data grows.
+
+
+\section{Graphs and graph algorithms}
+
+The concept of a graph, its representations and visualization. Euler and Hamiltonian paths. Tree graphs. Fundamental graph algorithms. Depth-first and breadth-first search. Optimal spanning trees. Prim’s Kruskal’s algorithm. Shortest paths. Dijkstra and Bellman-Ford algorithms.
+
+
+\subsection{The concept of a graph, its representations and visualization}
+
+**Graphs:**
+
+A graph is a mathematical structure that models relationships between objects. It consists of a finite set of vertices (also called nodes or points) and a finite set of edges (also called arcs or lines) that connect these vertices. Graphs can be used to represent various real-world scenarios, such as social networks, transportation networks, computer networks, and more.
+
+There are two main types of graphs:
+
+1. **Undirected graphs**: In an undirected graph, edges have no direction, meaning that an edge connecting two vertices can be traversed in both directions. The order of the vertices in an undirected edge does not matter.
+2. **Directed graphs (digraphs)**: In a directed graph, edges have a direction, meaning that an edge goes from one vertex to another but not necessarily the other way around. The order of the vertices in a directed edge matters.
+
+**Graph Representations:**
+
+There are several ways to represent a graph in a computer's memory, the most common being adjacency matrices and adjacency lists.
+
+1. **Adjacency Matrix**: An adjacency matrix is a square matrix of size n x n, where n is the number of vertices in the graph. The entry at the ith row and jth column (A[i][j]) represents the weight of the edge between vertices i and j. If there's no edge between vertices i and j, A[i][j] is usually set to 0 or infinity, depending on the context. Adjacency matrices provide fast access to edge information but may consume more space for sparse graphs.
+
+2. **Adjacency List**: An adjacency list is an array of linked lists, where each index in the array corresponds to a vertex in the graph. The linked list at each index contains all the vertices connected to the corresponding vertex. Adjacency lists are more space-efficient for sparse graphs compared to adjacency matrices, but edge access may be slower.
+
+**Graph Visualization:**
+
+Visualizing a graph involves drawing its vertices as points and its edges as lines connecting these points. Common ways to visualize a graph include:
+
+1. **Node-link diagrams**: In a node-link diagram, vertices are represented as circles or other shapes, and edges are represented as lines or curves connecting the vertices. Directed graphs may use arrows to indicate edge direction. Node-link diagrams are the most common visualization method for small to medium-sized graphs.
+
+2. **Matrix view**: In a matrix view, the graph is visualized using its adjacency matrix representation. Rows and columns correspond to vertices, and the cell at the intersection of a row and a column represents the edge between the corresponding vertices. A colored or patterned cell indicates the presence of an edge. Matrix views can be useful for visualizing dense graphs or graphs with a large number of vertices.
+
+Various graph drawing algorithms exist to determine the position of vertices and edges to create visually appealing and easy-to-understand graph visualizations. These algorithms attempt to optimize certain aesthetic criteria, such as minimizing edge crossings, evenly distributing vertices, and maintaining symmetry.
+
+In summary, the concept of a graph involves vertices and edges that represent relationships between objects. Graphs can be represented using adjacency matrices or adjacency lists and can be visualized using node-link diagrams or matrix views. Graph algorithms provide ways to analyze and manipulate graphs to solve various real-world problems.
+
+
+\subsection{Euler and Hamiltonian paths}
+
+Eulerian and Hamiltonian paths are concepts related to graph traversal, which involve visiting vertices or edges of a graph in a specific sequence. These paths are named after mathematicians Leonhard Euler and William Rowan Hamilton.
+
+**Eulerian Path and Eulerian Circuit:**
+
+An Eulerian path is a traversal of a graph that visits each edge exactly once. If the Eulerian path starts and ends at the same vertex, it's called an Eulerian circuit (or Eulerian cycle). Not all graphs have Eulerian paths or circuits.
+
+A graph has an Eulerian path if and only if it's connected (ignoring isolated vertices) and the number of vertices with odd degrees is either 0 or 2. If there are 0 vertices with odd degrees, the graph has an Eulerian circuit; if there are 2 vertices with odd degrees, the graph has an Eulerian path but not an Eulerian circuit.
+
+Eulerian paths and circuits can be found using Fleury's Algorithm or Hierholzer's Algorithm.
+
+**Hamiltonian Path and Hamiltonian Circuit:**
+
+A Hamiltonian path is a traversal of a graph that visits each vertex exactly once. If the Hamiltonian path starts and ends at the same vertex, it's called a Hamiltonian circuit (or Hamiltonian cycle). Not all graphs have Hamiltonian paths or circuits.
+
+Finding a Hamiltonian path or circuit is an NP-complete problem, meaning there is no known efficient algorithm to solve it for all cases. Some heuristics and algorithms exist for specific types of graphs or to find approximate solutions, such as the backtracking algorithm, the Nearest Neighbor heuristic, and the Christofides algorithm.
+
+**Differences between Eulerian and Hamiltonian Paths:**
+
+1. Eulerian paths visit each edge exactly once, while Hamiltonian paths visit each vertex exactly once.
+2. The existence of Eulerian paths and circuits can be determined by the degrees of the vertices, while determining the existence of Hamiltonian paths and circuits is an NP-complete problem with no known efficient algorithm for all cases.
+3. Eulerian paths and circuits have well-defined algorithms to find them (Fleury's Algorithm and Hierholzer's Algorithm), while Hamiltonian paths and circuits often rely on heuristics or algorithms for specific cases.
+
+In summary, Eulerian and Hamiltonian paths are graph traversal concepts that involve visiting edges or vertices of a graph in a specific sequence. Eulerian paths visit each edge exactly once, while Hamiltonian paths visit each vertex exactly once. Determining the existence and finding Eulerian paths is relatively straightforward, while Hamiltonian paths are more computationally challenging to identify.
+
+
+\subsection{Tree graphs}
+
+A tree is a special type of graph that has certain unique properties. In graph theory, a tree is an undirected, connected graph with no cycles. This means that there is exactly one unique path between any two vertices in the tree. Trees are common data structures in computer science and have various applications in algorithms, data management, and network design.
+
+Here are some key properties and terminology related to tree graphs:
+
+1. **Rooted Tree**: A rooted tree is a tree in which one vertex is designated as the root. In a rooted tree, the direction is implied from the root towards the leaves (vertices with no children). Every vertex in a rooted tree, except the root, has a unique parent (the vertex it is connected to towards the root).
+
+2. **Degree**: The degree of a vertex in a tree is the number of edges incident to it. In a rooted tree, the degree of a vertex is equal to the number of children it has plus one (for the edge connecting to its parent, except for the root).
+
+3. **Leaf**: A leaf is a vertex in a tree with a degree of 1 (in a rooted tree, it has no children).
+
+4. **Internal Vertex**: An internal vertex is a vertex in a tree that is not a leaf. In a rooted tree, internal vertices have at least one child.
+
+5. **Height**: The height of a tree is the length of the longest path from the root to a leaf. In a rooted tree, the height of a vertex is the length of the longest path from that vertex to a leaf.
+
+6. **Depth**: The depth of a vertex in a rooted tree is the length of the path from the root to that vertex. The root has a depth of 0.
+
+7. **Subtree**: A subtree is a connected subgraph of a tree that is itself a tree. In a rooted tree, every vertex defines a subtree, which includes the vertex itself and all its descendants.
+
+8. **Binary Tree**: A binary tree is a rooted tree in which each vertex has at most two children, usually referred to as the left child and the right child.
+
+Trees have several applications in computer science and other fields:
+
+1. **Data Structures**: Trees are used to implement various data structures, such as binary search trees, heaps, and trie structures. These data structures provide efficient algorithms for searching, sorting, and managing data.
+
+2. **Hierarchical Relationships**: Trees can be used to represent hierarchical relationships between objects, such as organizational charts, file systems, and taxonomies.
+
+3. **Network Design**: Trees are commonly used in network design, such as the construction of minimum spanning trees in graph algorithms like Kruskal's and Prim's algorithms.
+
+4. **Parsing and Compilation**: Trees are used in parsing algorithms for compilers and interpreters, such as syntax trees and abstract syntax trees, to represent the structure of a program.
+
+In summary, tree graphs are a special type of graph that is undirected, connected, and acyclic. Trees have several unique properties and terminology, such as rooted trees, leaves, internal vertices, and height. They have various applications in computer science, including implementing data structures, representing hierarchical relationships, network design, and parsing algorithms.
+
+
+\subsection{Optimal spanning trees. Prim’s Kruskal’s algorithm}
+
+Optimal spanning trees, often referred to as minimum spanning trees (MST), are a concept in graph theory related to finding a tree that spans all the vertices in a connected, undirected graph with weighted edges while minimizing the total edge weight. In other words, an MST connects all the vertices in the graph such that the sum of the edge weights is as small as possible, and there are no cycles.
+
+There are several algorithms to find the minimum spanning tree of a graph, with the most common being Kruskal's Algorithm and Prim's Algorithm.
+
+**Kruskal's Algorithm:**
+
+Kruskal's algorithm is a greedy algorithm that works by sorting the edges in the graph by their weights and adding them to the MST one by one as long as they do not create a cycle. The algorithm can be described as follows:
+
+1. Create an empty set for the MST edges.
+2. Sort all the edges of the graph by their weight in non-decreasing order.
+3. For each edge in the sorted list:
+   a. Check if adding this edge would create a cycle in the MST. You can use a disjoint-set data structure (also called a union-find data structure) to efficiently check for cycles.
+   b. If adding the edge does not create a cycle, add it to the MST edges set.
+4. Continue until the MST contains all the vertices of the graph.
+
+**Prim's Algorithm:**
+
+Prim's algorithm is another greedy algorithm that starts with an arbitrary vertex and grows the MST one edge at a time by selecting the minimum-weight edge that connects a vertex in the MST to a vertex outside the MST. The algorithm can be described as follows:
+
+1. Choose an arbitrary vertex as the starting vertex.
+2. Create an empty set for the MST edges and a set containing the starting vertex.
+3. While there are vertices not yet in the MST:
+   a. Find the edge with the smallest weight that connects a vertex in the MST to a vertex outside the MST.
+   b. Add this edge to the MST edges set and the connected vertex to the MST vertices set.
+4. Continue until the MST contains all the vertices of the graph.
+
+Both Kruskal's and Prim's algorithms have a time complexity of O(E log E) or O(E log V), where E is the number of edges and V is the number of vertices in the graph. The choice between the two algorithms depends on the specific problem and the implementation details.
+
+Minimum spanning trees have various applications in network design, such as designing efficient transportation networks, telecommunications infrastructure, and electrical power grids, where the goal is to minimize the total cost of connecting all the nodes in the network.
+
+
+\subsection{Shortest paths. Dijkstra and Bellman-Ford algorithms.}
+
+Shortest path algorithms are used to find the shortest path between two vertices in a graph with weighted edges. The two most common algorithms for solving the single-source shortest path problem are Dijkstra's Algorithm and the Bellman-Ford Algorithm. These algorithms can be applied to directed or undirected graphs and are used in various applications, such as routing in computer networks, navigation systems, and transportation planning.
+
+**Dijkstra's Algorithm:**
+
+Dijkstra's algorithm is a greedy algorithm that finds the shortest path from a source vertex to all other vertices in the graph. It works by iteratively selecting the vertex with the smallest known distance from the source and updating the distances of its neighbors. The algorithm can be described as follows:
+
+1. Assign an initial distance of 0 to the source vertex and infinity (∞) to all other vertices.
+2. Create a set of unvisited vertices and a priority queue (e.g., a min-heap) containing the vertices with their initial distances.
+3. While there are unvisited vertices:
+   a. Extract the vertex with the smallest distance from the priority queue.
+   b. Mark the vertex as visited.
+   c. For each unvisited neighbor of the current vertex, calculate the distance through the current vertex.
+   d. If the calculated distance is less than the known distance for that neighbor, update the neighbor's distance in the priority queue.
+4. Continue until all vertices are visited or the target vertex is visited (if looking for a path to a specific vertex).
+
+Dijkstra's algorithm has a time complexity of O(V\^2) for a naive implementation, but it can be improved to O(V log V + E) using a priority queue (e.g., a binary heap or a Fibonacci heap).
+
+Note that Dijkstra's algorithm does not work for graphs with negative edge weights, as it assumes that the shortest path can only be improved by visiting vertices with smaller distances.
+
+**Bellman-Ford Algorithm:**
+
+The Bellman-Ford algorithm is a dynamic programming algorithm that can find the shortest path from a source vertex to all other vertices in a graph, even if it contains negative edge weights. However, it cannot handle graphs with negative cycles. The algorithm works by iteratively updating the distances of all vertices for |V| - 1 iterations, where |V| is the number of vertices in the graph. The algorithm can be described as follows:
+
+1. Assign an initial distance of 0 to the source vertex and infinity (∞) to all other vertices.
+2. For each of the |V| - 1 iterations:
+   a. For each edge (u, v) in the graph with weight w(u, v), update the distance of vertex v if the distance through vertex u is shorter: `distance[v] = min(distance[v], distance[u] + w(u, v))`
+3. After the |V| - 1 iterations, check for negative cycles by iterating through all edges. If any distance can be updated, there is a negative cycle in the graph.
+
+The Bellman-Ford algorithm has a time complexity of O(V * E), which is slower than Dijkstra's algorithm for most graphs. However, it can handle graphs with negative edge weights as long as there are no negative cycles.
+
+In summary, Dijkstra's and Bellman-Ford algorithms are used to find the shortest paths in graphs with weighted edges. Dijkstra's algorithm is faster for graphs without negative edge weights, while the Bellman-Ford algorithm can handle graphs with negative edge weights but cannot handle negative cycles. Both algorithms have numerous applications in computer science and other fields where finding the shortest path between nodes is essential.
+
+
+\section{Imperative languages, object-oriented programming}
+
+Arithmetical and logical operations. Control structures (conditional and unconditional flow control, loops). Functions and procedures (subprograms, subroutines), data passing, local and global variables, the role of stacks in function calls. Basics of object-oriented programming: classes, objects, inheritance, polymorphism, encapsulation.
+
+
+\subsection{Arithmetical and logical operations}
+
+Imperative languages and object-oriented programming are programming paradigms that use a sequence of instructions to manipulate data and control the flow of a program. In these paradigms, arithmetic and logical operations are fundamental building blocks for performing calculations and making decisions.
+
+**Arithmetic Operations:**
+
+Arithmetic operations are used to perform mathematical calculations on numeric data types (e.g., integers, floating-point numbers). The basic arithmetic operations include:
+
+1. Addition (`+`): Adds two numbers together.
+2. Subtraction (`-`): Subtracts one number from another.
+3. Multiplication (`*`): Multiplies two numbers together.
+4. Division (`/`): Divides one number by another, often returning a floating-point result.
+5. Modulus or Remainder (`%`): Calculates the remainder of the division of one number by another (mostly applicable to integers).
+
+Example in Python:
+
+```python
+a = 10
+b = 5
+
+addition_result = a + b
+subtraction_result = a - b
+multiplication_result = a * b
+division_result = a / b
+modulus_result = a % b
+```
+
+**Logical Operations:**
+
+Logical operations are used to perform boolean logic on boolean data types (e.g., `True` or `False`). The basic logical operations include:
+
+1. AND (`&&` or `and`): Returns `True` if both operands are true, otherwise `False`.
+2. OR (`||` or `or`): Returns `True` if at least one of the operands is true, otherwise `False`.
+3. NOT (`!` or `not`): Returns `True` if the operand is false, and `False` if the operand is true.
+
+Example in Python:
+
+```python
+a = True
+b = False
+
+and_result = a and b
+or_result = a or b
+not_result = not a
+```
+
+**Comparison Operations:**
+
+Comparison operations are used to compare two values and return a boolean result. These operations are often used in combination with logical operations to create more complex conditions. The basic comparison operations include:
+
+1. Equal to (`==`): Returns `True` if the operands are equal, otherwise `False`.
+2. Not equal to (`!=`): Returns `True` if the operands are not equal, otherwise `False`.
+3. Less than (`<`): Returns `True` if the left operand is less than the right operand, otherwise `False`.
+4. Greater than (`>`): Returns `True` if the left operand is greater than the right operand, otherwise `False`.
+5. Less than or equal to (`<=`): Returns `True` if the left operand is less than or equal to the right operand, otherwise `False`.
+6. Greater than or equal to (`>=`): Returns `True` if the left operand is greater than or equal to the right operand, otherwise `False`.
+
+Example in Python:
+
+```python
+a = 10
+b = 5
+
+equal_result = a == b
+not_equal_result = a != b
+less_than_result = a < b
+greater_than_result = a > b
+less_than_or_equal_result = a <= b
+greater_than_or_equal_result = a >= b
+```
+
+In summary, arithmetic, logical, and comparison operations are fundamental components of imperative languages and object-oriented programming. They enable developers to perform calculations, make decisions, and compare values within their programs. These operations are essential for controlling the flow of a program and manipulating data to achieve the desired output.
+
+
+\subsection{Control structures (conditional and unconditional flow control, loops)}
+
+Control structures are essential components of imperative and object-oriented programming languages, as they help manage the flow of a program. Common control structures include conditional and unconditional flow control and loops.
+
+**Conditional Flow Control:**
+
+Conditional flow control structures allow the execution of a block of code based on a specific condition. The most common conditional flow control structures are the `if`, `else if`, and `else` statements. They evaluate a condition (usually involving a comparison operation) and execute the corresponding block of code if the condition is true.
+
+Example in Python:
+
+```python
+age = 18
+
+if age >= 21:
+    print("You can legally drink alcohol.")
+elif age >= 18:
+    print("You can legally vote, but you cannot drink alcohol.")
+else:
+    print("You cannot legally vote or drink alcohol.")
+```
+
+**Unconditional Flow Control:**
+
+Unconditional flow control structures alter the program's flow without evaluating a specific condition. The most common unconditional flow control structure is the `goto` statement, which transfers the control to a labeled statement in the code (note that `goto` is not available in some modern programming languages, like Python, due to its potential to create unreadable and unmanageable code).
+
+Another example of unconditional flow control is the `break` statement, which is used inside loops to exit the loop immediately, skipping the remaining iterations.
+
+Example in Python (using `break`):
+
+```python
+for i in range(1, 11):
+    if i == 5:
+        break
+    print(i)
+```
+
+**Loops:**
+
+Loops are control structures that enable the repeated execution of a block of code until a specific condition is met. There are two main types of loops: `for` loops and `while` loops.
+
+1. `for` loops: A `for` loop iterates over a sequence (e.g., a list, tuple, or range) and executes a block of code for each element in the sequence. In Python, `for` loops work with any iterable object.
+
+Example in Python:
+
+```python
+for i in range(5):
+    print(i)
+```
+
+2. `while` loops: A `while` loop repeatedly executes a block of code as long as a given condition is true. The condition is evaluated before each iteration, and if it is false, the loop is terminated.
+
+Example in Python:
+
+```python
+count = 0
+
+while count < 5:
+    print(count)
+    count += 1
+```
+
+Control structures play a critical role in managing the flow of a program, allowing developers to create more dynamic and flexible code. Conditional and unconditional flow control structures help make decisions based on conditions, while loops enable the repeated execution of code blocks. Together, these control structures form the foundation of imperative and object-oriented programming languages.
+
+
+\subsection{Functions and procedures (subprograms, subroutines)}
+
+Functions and procedures, also known as subprograms or subroutines, are fundamental components in imperative and object-oriented programming languages. They are reusable blocks of code that perform a specific task, allowing for better organization, modularity, and maintainability of a program. Using functions and procedures enables code reuse, which reduces code redundancy and makes the overall program easier to understand and modify.
+
+**Functions:**
+
+Functions are subprograms that take input parameters, perform a specific task, and return a value. Functions can be called by providing the required parameters and can be used to compute a result or process data. Functions can be defined by the programmer or built-in as part of a programming language's standard library.
+
+Example in Python:
+
+```python
+def add_numbers(a, b):
+    return a + b
+
+result = add_numbers(5, 3)
+print(result)  # Output: 8
+```
+
+**Procedures:**
+
+Procedures, also known as subroutines, are similar to functions, but they do not return a value. Instead, they perform a specific task or a series of tasks, usually involving side effects (e.g., modifying variables, printing output). Procedures are used for code organization and modularity when a return value is not necessary.
+
+In some programming languages, procedures and functions are distinct constructs. However, in Python and many other modern languages, the distinction between functions and procedures is less clear, as functions can be used as procedures by simply not returning a value.
+
+Example in Python (a function used as a procedure):
+
+```python
+def print_greeting(name):
+    print(f"Hello, {name}!")
+
+print_greeting("Alice")  # Output: Hello, Alice!
+```
+
+**Parameters and Arguments:**
+
+Functions and procedures can accept input values, called parameters, which allow for the passing of data into the subprogram. When a function or procedure is called with specific values for these parameters, the values are referred to as arguments.
+
+Parameters can be passed by value (where a copy of the value is passed) or by reference (where a reference to the memory location of the original value is passed). The method of passing parameters depends on the programming language and the data type of the parameter. In Python, for example, mutable objects like lists and dictionaries are passed by reference, while immutable objects like numbers and strings are passed by value.
+
+Functions and procedures are essential components of imperative and object-oriented programming languages, as they provide a modular and reusable structure for organizing code. They improve code readability, maintainability, and reusability, making complex programs more manageable and easier to understand.
+
+
+\subsection{data passing, local and global variables}
+
+In imperative and object-oriented programming languages, data passing, local variables, and global variables are important concepts that enable efficient communication between different parts of a program.
+
+**Data Passing:**
+
+Data passing refers to the process of transferring data between different parts of a program, such as between functions or procedures. There are two primary ways to pass data: pass by value and pass by reference.
+
+1. Pass by Value: When data is passed by value, a copy of the original value is sent to the function or procedure. Any changes made to the copy inside the function or procedure do not affect the original value.
+
+2. Pass by Reference: When data is passed by reference, a reference to the memory location of the original value is sent to the function or procedure. Any changes made to the value inside the function or procedure directly affect the original value.
+
+In Python, the method of passing data depends on the data type. Immutable objects (e.g., numbers, strings, and tuples) are passed by value, while mutable objects (e.g., lists, dictionaries, and sets) are passed by reference.
+
+**Local Variables:**
+
+Local variables are variables that are declared inside a function, procedure, or code block. They have a local scope, which means that they are only accessible within the block of code where they are declared. When the function or procedure finishes executing, all local variables are destroyed, and their memory is deallocated.
+
+Example in Python:
+
+```python
+def example_function():
+    local_variable = 10
+    print(local_variable)  # Output: 10
+
+example_function()
+print(local_variable)  # This will raise an error because local_variable is not defined in this scope
+```
+
+**Global Variables:**
+
+Global variables are variables that are declared outside any function or procedure. They have a global scope, which means that they can be accessed from any part of the program. However, special care must be taken when modifying global variables from within a function or procedure, as it can lead to unintended side effects and make the program harder to understand and maintain.
+
+In Python, you can use the `global` keyword to indicate that a variable inside a function or procedure should be treated as a global variable.
+
+Example in Python:
+
+```python
+global_variable = 20
+
+def example_function():
+    global global_variable
+    global_variable = 30
+    print(global_variable)  # Output: 30
+
+example_function()
+print(global_variable)  # Output: 30
+```
+
+Data passing, local variables, and global variables are essential concepts in imperative and object-oriented programming languages, as they enable efficient communication between different parts of a program and provide a structure for managing data. Understanding these concepts is crucial for writing clean, efficient, and maintainable code.
+
+
+\subsection{the role of stacks in function calls}
+
+In computer programming, the stack is a data structure that plays a critical role in the execution of function calls. When a function is called, the program uses a stack to manage the function's execution context, which includes local variables, function parameters, and return addresses. The stack is a last-in, first-out (LIFO) structure, which means that the most recently added item is the first one to be removed.
+
+Here are some essential aspects of stacks in function calls:
+
+**Stack Frame:**
+
+When a function is called, a new stack frame is created and pushed onto the stack. A stack frame is a memory block that contains the function's execution context, including:
+
+1. Function parameters: The values (or references) passed as arguments to the function.
+2. Local variables: The variables declared inside the function.
+3. Return address: The memory address to which the program should return after the function finishes executing.
+
+**Function Call:**
+
+When a function is called, the following steps occur:
+
+1. The program pushes the return address (the next instruction after the function call) onto the stack.
+2. The program pushes the function's parameters onto the stack.
+3. The program transfers control to the function by jumping to its starting memory address.
+4. Inside the function, a new stack frame is created, and local variables are allocated within this frame.
+5. The function executes its code, using the stack to manage its local variables and parameters.
+
+**Function Return:**
+
+When a function finishes executing and is ready to return, the following steps occur:
+
+1. If the function has a return value, it is typically placed in a specific register or memory location for the calling function to access.
+2. The function's stack frame is popped from the stack, and the local variables and parameters are deallocated.
+3. The program retrieves the return address from the stack and jumps back to that address, resuming execution in the calling function.
+
+**Recursion:**
+
+Recursion occurs when a function calls itself, either directly or indirectly through another function. The stack plays a crucial role in managing recursive function calls, as each call creates a new stack frame with its own set of local variables and parameters. This allows each recursive call to maintain its own execution context without interfering with other calls. However, excessive recursion can lead to a stack overflow, which occurs when the stack's memory is exhausted, causing the program to crash.
+
+In summary, the stack is an essential data structure in function calls, managing the execution context, local variables, function parameters, and return addresses. The stack enables the efficient and organized execution of functions, including the management of recursive calls. Understanding the role of stacks in function calls is vital for grasping the inner workings of programming languages and writing efficient, reliable code.
+
+
+
+
+
+\subsection{Basics of object-oriented programming: classes, objects, inheritance, polymorphism, encapsulation}
+
+Object-oriented programming (OOP) is a programming paradigm that emphasizes the use of objects, which are instances of classes, to model and organize code. OOP focuses on the relationships between objects and the actions they can perform, making it easier to structure complex programs. The four main principles of OOP are classes, objects, inheritance, polymorphism, and encapsulation.
+
+**Classes:**
+
+A class is a blueprint or template that defines the structure and behavior of objects of the same type. Classes specify the attributes (data) and methods (functions) shared by all instances of the class.
+
+Example in Python:
+
+```python
+class Dog:
+    def __init__(self, name, breed):
+        self.name = name
+        self.breed = breed
+
+    def bark(self):
+        print("Woof!")
+```
+
+**Objects:**
+
+Objects are instances of classes. They are individual entities that have their own state (attributes) and behavior (methods). The state of an object is determined by the values of its attributes, while its behavior is defined by the methods of its class.
+
+Example in Python:
+
+```python
+dog1 = Dog("Fido", "Labrador")
+dog2 = Dog("Buddy", "Golden Retriever")
+
+dog1.bark()  # Output: Woof!
+dog2.bark()  # Output: Woof!
+```
+
+**Inheritance:**
+
+Inheritance is a mechanism that allows one class (the subclass or derived class) to inherit the attributes and methods of another class (the superclass or base class). This promotes code reusability and modularity, as common functionality can be defined in a base class and extended or overridden in derived classes.
+
+Example in Python:
+
+```python
+class Animal:
+    def speak(self):
+        pass
+
+class Dog(Animal):
+    def speak(self):
+        print("Woof!")
+
+class Cat(Animal):
+    def speak(self):
+        print("Meow!")
+
+dog = Dog()
+cat = Cat()
+
+dog.speak()  # Output: Woof!
+cat.speak()  # Output: Meow!
+```
+
+**Polymorphism:**
+
+Polymorphism is the ability of a single interface or function to represent different types or classes. It allows objects of different classes to be treated as objects of a common superclass, enabling the same function or method call to produce different results based on the object's class.
+
+Example in Python (using the previous `Animal`, `Dog`, and `Cat` classes):
+
+```python
+def make_animal_speak(animal):
+    animal.speak()
+
+dog = Dog()
+cat = Cat()
+
+make_animal_speak(dog)  # Output: Woof!
+make_animal_speak(cat)  # Output: Meow!
+```
+
+**Encapsulation:**
+
+Encapsulation is the process of hiding the internal details of an object and exposing only what is necessary. This is achieved by using private attributes (data) and public methods (functions) in a class, which helps protect the object's state from unintended modifications and ensures that the object can only be interacted with through its public interface.
+
+Example in Python:
+
+```python
+class BankAccount:
+    def __init__(self, balance):
+        self.__balance = balance
+
+    def deposit(self, amount):
+        self.__balance += amount
+
+    def withdraw(self, amount):
+        if amount <= self.__balance:
+            self.__balance -= amount
+        else:
+            print("Insufficient funds")
+
+    def get_balance(self):
+        return self.__balance
+
+account = BankAccount(100)
+account.deposit(50)
+account.withdraw(25)
+print(account.get_balance())  # Output: 125
+```
+
+Object-oriented programming provides a structured way to organize code by focusing on objects and their interactions. The principles of classes, objects, inheritance, polymorphism, and encapsulation enable the creation of modular, reusable, and maintainable code, simplifying the development of complex programs.
+
+
+\section{Compilers}
+
+Chomsky classification of formal languages, regular languages, their properties and relation to lexical analyzer programs. Finite automata. The structure of compilers, the process of compilation or interpretation, look-ahead. Context-free grammars, their properties and role in the theory of compilers. Methods of parsing (LL(k), LR(1), grammar, syntax trees, etc.) Implementation of symbol trees and operations on them.
+
+
+\section{System engineering and software development}
+
+Basics of UML. Meta-models. The 4-layer meta-model of UML. Basics of workflow modeling. The description of the steps of the classic and RUP methodologies with the Software Process Engineering Model (SPEM) UML profile. Programming and software engineering technologies and methodologies. Procedural techniques. The elements of the RUP methodology, phases and activities.
+
+
+\section{Set theory basics}
+
+Sets, operations on sets. Relations, functions. Injective, onto, and bijective functions. Equivalence relations. Ordering relations. Natural, integer, rational, real, and complex numbers: their properties, operations and ordering properties.
+
+
+\section{Logics}
+
+Propositional logics: propositions (statements), operations with propositions, formulas, formalization, disjunctive and conjunctive normal forms, inferences, inference rules. Predicate logic: predicates, quantifiers, formulae, formalization and interpretation, inferences in predicate logics.
+
+
+\section{Linear algebra}
+
+Real vector spaces, normed spaces. Vector operations. Inner (scalar) product. Linear independence, basis, dimension. Matrices and linear operators. Homogeneous and inhomogeneous linear systems of equations. The determinant and trace of matrices. Eigenvalues and eigenvectors, spectral decomposition of symmetric matrices.
+
+
+\section{Calculus}
+
+Convergence of sequences and series. Taylor-series. Limits and continuity of functions. Differential calculus of one- and multivariable functions. Finding function minima and maxima. Convexity of functions. Real integral calculus, definite and indefinite integrals.
+
+
+\section{Probability theory}
+
+Discrete and continuous random variables. Probability distributions and probability densities. Independence of random variables. Joint probabilities, marginal distributions, expectation value, variance, correlation. Laws of large numbers. Central limit theorem.
+
+
+\section{Number theory}
+
+Greatest common divisor. Euclidean division. Euclidean algorithm. Primes and non-factorizable numbers. Unique prime factorization. Systems of linear Diophantine equations, linear congruences. Euler’s theorem, Chinese remainder theorem. Number theoretic functions. Multiplicativity. Sum and inverse functions.
+
+
+\end{document}
