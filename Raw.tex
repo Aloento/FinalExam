@@ -1088,9 +1088,6 @@ Recursion occurs when a function calls itself, either directly or indirectly thr
 In summary, the stack is an essential data structure in function calls, managing the execution context, local variables, function parameters, and return addresses. The stack enables the efficient and organized execution of functions, including the management of recursive calls. Understanding the role of stacks in function calls is vital for grasping the inner workings of programming languages and writing efficient, reliable code.
 
 
-
-
-
 \subsection{Basics of object-oriented programming: classes, objects, inheritance, polymorphism, encapsulation}
 
 Object-oriented programming (OOP) is a programming paradigm that emphasizes the use of objects, which are instances of classes, to model and organize code. OOP focuses on the relationships between objects and the actions they can perform, making it easier to structure complex programs. The four main principles of OOP are classes, objects, inheritance, polymorphism, and encapsulation.
@@ -1205,9 +1202,506 @@ Object-oriented programming provides a structured way to organize code by focusi
 Chomsky classification of formal languages, regular languages, their properties and relation to lexical analyzer programs. Finite automata. The structure of compilers, the process of compilation or interpretation, look-ahead. Context-free grammars, their properties and role in the theory of compilers. Methods of parsing (LL(k), LR(1), grammar, syntax trees, etc.) Implementation of symbol trees and operations on them.
 
 
+\subsection{Chomsky Classification}
+
+https://zh.wikipedia.org/wiki/%E4%B9%94%E5%A7%86%E6%96%AF%E5%9F%BA%E8%B0%B1%E7%B3%BB
+
+
+\subsection{Regular Languages}
+
+https://zh.wikipedia.org/zh-cn/%E6%AD%A3%E5%88%99%E8%AF%AD%E8%A8%80
+
+
+\subsection{relation to lexical analyzer programs}
+
+Lexical analyzers, also known as lexers or scanners, are programs used in the early stages of the compilation or interpretation process. They are responsible for processing a sequence of input symbols (usually source code) and breaking it down into a sequence of tokens, each representing a meaningful unit of the programming language. These tokens are then passed on to a parser, which is responsible for checking the syntactic structure of the input and generating an abstract syntax tree (AST) or similar data structure.
+
+The relation between regular languages and lexical analyzers lies in the fact that regular languages can be used to describe the patterns and rules that define the tokens of a programming language. Regular expressions, which are a concise way to represent regular languages, can be used to define the structure of tokens, such as keywords, identifiers, literals, and various operators in a programming language.
+
+Lexical analyzers use finite automata (either deterministic or non-deterministic) to efficiently recognize regular languages and match input symbols to the corresponding regular expressions. These finite automata can be constructed from the regular expressions that define the tokens of the programming language.
+
+In practice, many lexer generators and tools, such as Lex, Flex, or ANTLR, exist to assist in creating lexical analyzers. These tools typically take regular expressions as input, generate the corresponding finite automata, and produce code for a lexical analyzer that can tokenize input according to the specified regular expressions.
+
+In summary, regular languages are an essential concept in the design and implementation of lexical analyzers. They provide a way to define the structure of tokens in a programming language and enable the efficient recognition and tokenization of input symbols using finite automata.
+
+
+\subsection{AST}
+
+https://juejin.cn/post/6844904035271573511
+
+
+\subsection{Finite automata}
+
+A finite automaton (FA), also known as a finite-state machine (FSM), is a theoretical model of computation used to recognize patterns and represent sequential logic. It consists of a finite set of states, a finite set of input symbols, a transition function, an initial state, and a set of accept states. Finite automata are used to recognize regular languages, which are the simplest class of languages in the Chomsky Hierarchy.
+
+There are two main types of finite automata:
+
+1. **Deterministic Finite Automaton (DFA)**: For each state and input symbol, there is exactly one transition to another state (or possibly the same state). In other words, given the current state and input symbol, the next state is uniquely determined.
+
+2. **Nondeterministic Finite Automaton (NFA)**: For each state and input symbol, there can be multiple transitions to different states, or even none. Additionally, NFAs may have ε-transitions, which allow transitioning between states without consuming any input symbols.
+
+Both DFA and NFA have equivalent expressive power, meaning they can recognize the same set of regular languages. However, NFAs can sometimes be more compact and easier to construct. There are algorithms, such as the powerset construction, to convert an NFA into an equivalent DFA.
+
+Finite automata have various applications in computer science, including:
+
+* **Lexical analysis**: As mentioned earlier, finite automata are used in lexical analyzers to tokenize input symbols (e.g., source code) based on regular expressions that define the tokens of a programming language.
+
+* **Pattern matching**: Finite automata can be used to search for patterns in text, such as in grep or other text search utilities. Regular expressions are often used to define the search patterns, and finite automata perform the actual pattern matching.
+
+* **Protocol verification**: Finite automata can model the behavior of communication protocols and verify their correctness by exploring the possible states and transitions.
+
+* **Control systems**: Finite automata can be used to model the behavior of digital circuits and control systems, which can help in the design and verification of these systems.
+
+In summary, finite automata are abstract computational models that can recognize regular languages and represent sequential logic. They have numerous applications in computer science, including lexical analysis, pattern matching, protocol verification, and control systems. Both deterministic and nondeterministic finite automata have equivalent expressive power, but NFAs can sometimes be more compact and easier to construct.
+
+
+\subsection{The structure of compilers, the process of compilation or interpretation, look-ahead}
+
+## Structure of Compilers
+
+A compiler is a software program that translates high-level source code written in a programming language into low-level machine code or an intermediate representation that can be executed by a computer. The process of compilation involves several stages, including lexical analysis, syntax analysis, semantic analysis, intermediate code generation, optimization, and code generation. Here's a brief overview of these stages:
+
+1. **Lexical analysis**: The first phase of compilation, in which the source code is broken down into a sequence of tokens, including keywords, identifiers, literals, and symbols.
+
+2. **Syntax analysis**: Also known as parsing, this phase involves organizing the tokens into a hierarchical structure called an abstract syntax tree (AST) based on the grammar of the language.
+
+3. **Semantic analysis**: In this phase, the compiler checks the AST for semantic correctness, such as type-checking, symbol resolution, and scope analysis.
+
+4. **Intermediate code generation**: The compiler converts the AST into an intermediate representation (IR), which is a lower-level, platform-independent representation of the code.
+
+5. **Optimization**: The compiler optimizes the IR to improve the performance and efficiency of the generated code.
+
+6. **Code generation**: The final phase of compilation, in which the optimized IR is converted into the target machine code or assembly language.
+
+## Process of Compilation or Interpretation
+
+Compilation and interpretation are two methods of executing code written in a programming language. Here's a brief comparison of the two:
+
+- **Compilation**: In this process, the source code is translated into machine code before execution. The compiled code is saved as a separate file, usually an executable or object file, which can be executed by the target machine without the need for the compiler. Compilation is generally slower than interpretation, but the resulting executable runs faster since the code has already been translated to machine code.
+
+- **Interpretation**: An interpreter directly executes the source code without translating it to machine code. The interpreter reads and executes the code line-by-line during runtime. Interpretation is generally slower than compilation since the code is being translated and executed on-the-fly, but it offers more flexibility and easier debugging.
+
+Some programming languages, such as Python and Java, use a combination of both techniques, where the source code is compiled to an intermediate representation called bytecode, which is then interpreted by a virtual machine.
+
+## Look-Ahead
+
+Look-ahead is a technique used in compilers, specifically during the parsing phase, to predict what comes next in the input stream based on the current state of the parser. It helps the parser make decisions about which production rule to apply in case of ambiguity.
+
+There are different types of look-ahead techniques:
+
+- **LL(k)**: This is a top-down parsing technique where the parser looks ahead by `k` tokens to make a decision. LL stands for "Left-to-right, Leftmost derivation," and the `k` represents the number of tokens the parser can look ahead.
+
+- **LR(k)**: This is a bottom-up parsing technique where the parser looks ahead by `k` tokens to make a decision. LR stands for "Left-to-right, Rightmost derivation," and the `k` represents the number of tokens the parser can look ahead.
+
+Increasing the look-ahead can improve the parser's capability to handle more complex grammar rules and resolve ambiguities, but it also increases the complexity of the parsing algorithm.
+
+
+\subsection{Methods of parsing (LL(k), LR(1), grammar, syntax trees, etc.)}
+
+Parsing, also known as syntax analysis, is the process of analyzing a sequence of tokens to determine their grammatical structure according to a formal grammar. There are several parsing techniques used in compilers, and we'll discuss some of the most common ones, including LL(k), LR(1), and their associated concepts such as grammar and syntax trees.
+
+### LL(k) Parsing
+
+LL(k) parsing is a top-down, predictive parsing technique that uses a left-to-right scanning of the input and constructs a leftmost derivation. The 'k' in LL(k) refers to the look-ahead of k tokens used to make decisions during parsing.
+
+This method starts with the start symbol of the grammar and expands the non-terminals using the production rules until a match with the input is found. LL(k) parsers use a recursive descent algorithm or a table-driven approach to implement parsing.
+
+### LR(1) Parsing
+
+LR(1) parsing is a bottom-up technique that constructs a rightmost derivation in reverse order. The '1' in LR(1) refers to the look-ahead of one token used to make decisions during parsing. LR(1) parsers are more powerful than LL(k) parsers and can handle a larger class of grammars.
+
+LR(1) parsing involves constructing a parse table using the grammar rules and the LR(1) items, which consist of a production rule, a position marker (dot), and a lookahead token. The parsing process uses a stack to hold the parser states, and the decisions are made based on the current state, lookahead token, and the parse table entries.
+
+There are several types of LR parsers, such as Simple LR (SLR), Canonical LR, and Lookahead LR (LALR), which differ in the way the parse table is constructed and the number of parser states.
+
+### Grammar
+
+A grammar is a set of production rules that define the syntax of a programming language. It's typically expressed using a notation called Backus-Naur Form (BNF) or Extended Backus-Naur Form (EBNF). A grammar consists of:
+
+- **Non-terminal symbols**: Abstract syntactic categories that represent a group of related structures.
+- **Terminal symbols**: Tokens that correspond to the leaf nodes in the syntax tree (keywords, identifiers, literals, etc.).
+- **Production rules**: Rules that define how non-terminal symbols can be replaced by a sequence of terminal and non-terminal symbols.
+
+### Syntax Trees
+
+A syntax tree, also known as a parse tree or an abstract syntax tree (AST), is a hierarchical representation of the source code's grammatical structure. The tree's internal nodes represent non-terminal symbols, while the leaf nodes represent terminal symbols. Syntax trees are generated during the parsing phase and are used in subsequent compiler phases, such as semantic analysis and intermediate code generation.
+
+
+\subsection{Implementation of symbol trees and operations on them}
+Symbol trees, also known as abstract syntax trees (ASTs), are tree-like data structures that represent the hierarchical structure of source code according to a language's grammar. They are generated during the parsing phase of compilation and are used in subsequent phases for semantic analysis, optimization, and code generation. In this section, we'll discuss the implementation of ASTs and some common operations performed on them.
+
+### Implementation
+
+To implement an AST, you first need to define the node types to represent the different language constructs, such as expressions, statements, and declarations. These nodes can be implemented using classes or structs, depending on the programming language. Each node type should have a unique identifier, along with any relevant attributes and child nodes.
+
+Here's a simple example in Python:
+
+```python
+class Node:
+    def __init__(self, node_type, children=None, **attributes):
+        self.node_type = node_type
+        self.children = children or []
+        self.attributes = attributes
+
+    def add_child(self, child):
+        self.children.append(child)
+```
+
+With this basic implementation, you can create nodes for different language constructs, such as:
+
+```python
+# Variable declaration
+var_decl = Node("VAR_DECL", identifier="x", data_type="int")
+
+# Assignment statement
+assign_stmt = Node("ASSIGN_STMT", identifier="x", expression=Node("LITERAL", value=42))
+```
+
+### Common Operations
+
+Here are some common operations that can be performed on ASTs:
+
+1. **Traversal**: Traversing the AST is a fundamental operation, as it allows you to visit each node in the tree to perform various analyses or transformations. Common tree traversal algorithms include depth-first search (DFS) and breadth-first search (BFS). You can implement these traversals using either recursion or iteration.
+
+2. **Pretty-printing**: This operation involves converting the AST back to a human-readable representation of the source code. This can be useful for debugging or code formatting purposes. You can implement pretty-printing using a recursive traversal of the AST, generating the corresponding source code for each node.
+
+3. **Semantic analysis**: Once an AST is generated, you can perform various analyses to check for semantic correctness, such as type checking, symbol resolution, and scope analysis. This typically involves traversing the AST and maintaining a symbol table to store information about identifiers and their corresponding declarations.
+
+4. **AST transformations**: You can modify the AST to perform optimizations or code transformations, such as constant folding, dead code elimination, or loop unrolling. This typically involves traversing the AST, identifying patterns or opportunities for optimization, and modifying the tree accordingly.
+
+5. **Code generation**: The final phase of compilation involves converting the AST to target machine code or an intermediate representation, such as bytecode or LLVM IR. This can be accomplished by traversing the AST and generating the corresponding code for each node, using a stack-based or register-based approach.
+
+
+
 \section{System engineering and software development}
 
 Basics of UML. Meta-models. The 4-layer meta-model of UML. Basics of workflow modeling. The description of the steps of the classic and RUP methodologies with the Software Process Engineering Model (SPEM) UML profile. Programming and software engineering technologies and methodologies. Procedural techniques. The elements of the RUP methodology, phases and activities.
+
+
+\subsection{Basics of UML}
+
+Unified Modeling Language (UML) is a standardized visual language used to model software systems, including their structure, behavior, and interactions. UML provides a set of graphical notation techniques to create abstract models of specific systems, which can then be used as blueprints for actual software development.
+
+Here are the basic building blocks of UML:
+
+1. **UML Diagrams**: UML is comprised of various types of diagrams, each serving a specific purpose. The main diagrams are:
+
+   - Class Diagram
+   - Object Diagram
+   - Use Case Diagram
+   - Sequence Diagram
+   - Collaboration Diagram
+   - Statechart Diagram
+   - Activity Diagram
+   - Component Diagram
+   - Deployment Diagram
+
+2. **UML Elements**: Each UML diagram consists of several elements, which represent the various aspects of a software system. Some common UML elements are:
+
+   - Classes and Objects
+   - Interfaces
+   - Relationships (association, aggregation, composition, inheritance, and dependency)
+   - Packages
+   - Actors
+   - Use Cases
+   - States and Transitions
+   - Activities and Actions
+   - Components and Nodes
+
+Let's briefly explain some of the most important UML diagrams:
+
+- **Class Diagram**: This diagram shows the static structure of a system by depicting its classes, attributes, operations, and relationships between objects. It represents the fundamental blueprint of a software system.
+
+- **Object Diagram**: This diagram represents the instances of classes and their relationships at a particular point in time. It is used to visualize the structure of objects and their relationships in the system.
+
+- **Use Case Diagram**: This diagram models the interactions between actors (end-users or other systems) and the system itself. It helps identify the system's functionality and the roles that interact with it.
+
+- **Sequence Diagram**: This diagram represents the dynamic behavior of a system by showing the interactions between objects in a specific sequence. It highlights the order in which messages are exchanged between objects to accomplish a specific task.
+
+- **Statechart Diagram**: This diagram models the dynamic behavior of an object by showing its possible states and the transitions between them. It is useful for representing the life cycle of an object over time.
+
+- **Activity Diagram**: This diagram models the flow of control within a system, showing the sequence of activities and decisions involved in the execution of a specific process or use case.
+
+- **Component Diagram**: This diagram represents the physical organization of a software system, displaying the components that make up the system and their dependencies.
+
+- **Deployment Diagram**: This diagram models the hardware architecture of a system, depicting the nodes (hardware devices) and the components that are deployed on them.
+
+These are just the basics of UML. To fully understand and utilize UML, it is essential to learn the various diagrams and elements in detail and practice creating models for real-world software systems.
+
+
+\subsection{Meta-models. The 4-layer meta-model of UML}
+
+A meta-model is a model that describes the structure, semantics, and constraints of other models. In other words, it is a model of models. Meta-models are used to define the rules and conventions of modeling languages, ensuring that the models created are consistent and adhere to a set of predefined guidelines.
+
+In the context of UML (Unified Modeling Language), the UML meta-model is a specification that defines the structure and semantics of UML diagrams and their elements. The UML meta-model acts as a blueprint for creating UML models that are both consistent and compliant with the UML standards.
+
+There are typically four layers in the meta-modeling hierarchy:
+
+1. **M0 - Instance Layer**: This layer represents the actual instances or objects in the real-world system being modeled.
+2. **M1 - Model Layer**: This layer contains the models that describe the structure and behavior of the system. These models are created using the modeling language defined by the meta-model in the M2 layer.
+3. **M2 - Meta-Model Layer**: This layer contains the meta-model that defines the structure, semantics, and constraints of the modeling language used in the M1 layer.
+4. **M3 - Meta-Meta-Model Layer**: This layer contains the meta-meta-model that describes the structure and semantics of the meta-models in the M2 layer. The most widely known meta-meta-model is the MOF (Meta-Object Facility) standard, which is used to define the structure of various meta-models, including the UML meta-model.
+
+In summary, meta-models are essential for establishing the structure and rules of modeling languages. They provide the foundation for creating consistent and compliant models that accurately represent the systems being modeled. Meta-modeling is a crucial aspect of model-driven engineering and software development methodologies.
+
+
+\subsection{Basics of workflow modeling}
+\subsection{Basics of workflow modeling.}
+
+Workflow modeling is a technique used to represent the sequence of activities, tasks, and decisions involved in a business process or system. The goal of workflow modeling is to analyze and optimize these processes, improve efficiency, and facilitate communication among team members.
+
+Here are the basics of workflow modeling:
+
+1. **Identify the Process**: Determine the process you want to model. It could be a high-level business process or a more specific, low-level process within a larger system. Make sure you clearly define the scope and purpose of the process.
+
+2. **Define Activities**: Break down the process into individual activities or tasks. Activities represent the work performed in the process, such as creating a document, approving a request, or updating a database.
+
+3. **Determine Sequence**: Establish the order in which activities must be executed. Some activities may need to be completed before others can begin, while others may be performed concurrently.
+
+4. **Identify Roles**: Assign roles (or actors) to each activity. Roles can represent people, teams, or systems responsible for performing the activities. Clearly defining roles helps to establish accountability and improve communication within the process.
+
+5. **Model Decisions and Branching**: Identify decision points in the process where the workflow may follow different paths based on certain conditions. These decision points may involve branching (splitting the flow into multiple paths) or merging (combining multiple paths back into a single path).
+
+6. **Add Workflow Elements**: In addition to activities and decision points, there are several other elements commonly used in workflow modeling, such as:
+
+   - Start and end events: Indicate the beginning and end of the process.
+   - Gateways: Represent decision points or points where the flow splits or merges.
+   - Connectors: Show the flow between activities, events, and gateways.
+
+7. **Choose a Notation**: Select a notation or modeling language to visually represent your workflow model. Some popular notations include Business Process Model and Notation (BPMN), UML Activity Diagrams, and flowcharts. Each notation has its own set of symbols and conventions for representing workflows.
+
+8. **Create the Workflow Diagram**: Using the chosen notation, create a visual representation of the workflow by arranging the elements on a canvas or diagramming tool. Make sure the diagram is clear, easy to understand, and accurately represents the process being modeled.
+
+9. **Validate and Refine**: Review the workflow model with stakeholders and experts to ensure that it accurately represents the process and meets the intended objectives. Refine the model as needed based on feedback and analysis.
+
+10. **Monitor and Improve**: Once the workflow model is implemented, monitor its performance and gather data on areas that may need improvement. Continuously refine the model to optimize the process and adapt to changing requirements.
+
+By following these basic steps, you can create a workflow model that represents and optimizes business processes, leading to improved efficiency, better communication, and more effective decision-making.
+
+
+
+\subsection{The description of the steps of the classic and RUP methodologies with the Software Process Engineering Model (SPEM) UML profile}
+
+The Software Process Engineering Meta-model (SPEM) is a UML profile that provides a standardized way to model, define, and manage software development processes. It allows organizations to customize and adapt methodologies like the classic Waterfall model and Rational Unified Process (RUP) to their specific needs.
+
+Let's describe the steps of the classic Waterfall model and RUP using SPEM concepts:
+
+**Classic Waterfall Model**
+
+The Waterfall model is a linear and sequential approach to software development. It consists of distinct phases, with each phase being completed before moving on to the next.
+
+1. *Requirements*: In this phase, the project's functional and non-functional requirements are gathered and documented. In SPEM, this phase can be represented using a **Task Definition** called "Gather Requirements," assigned to a **Role Definition** such as "Business Analyst."
+
+2. *Design*: The system architecture and design are created based on the requirements. In SPEM, this phase can be represented by a Task Definition called "System Design," assigned to a Role Definition such as "System Architect."
+
+3. *Implementation*: The design is translated into source code by developers. In SPEM, this phase can be represented by a Task Definition called "Implement System," assigned to a Role Definition such as "Software Developer."
+
+4. *Testing*: The system is tested to ensure it meets the requirements and is free of defects. In SPEM, this phase can be represented by a Task Definition called "Test System," assigned to a Role Definition such as "Test Engineer."
+
+5. *Deployment*: The system is deployed to the production environment and made available to end-users. In SPEM, this phase can be represented by a Task Definition called "Deploy System," assigned to a Role Definition such as "Deployment Engineer."
+
+6. *Maintenance*: The system is maintained and updated as needed. In SPEM, this phase can be represented by a Task Definition called "Maintain System," assigned to a Role Definition such as "Maintenance Engineer."
+
+**Rational Unified Process (RUP)**
+
+RUP is an iterative and incremental software development process, organized into four phases, each consisting of several iterations.
+
+1. *Inception*: The project's scope, vision, and business case are established. In SPEM, this phase can include Task Definitions such as "Define Project Vision" and "Create Business Case," assigned to Role Definitions like "Project Manager" and "Business Analyst."
+
+2. *Elaboration*: The system's architecture and high-level design are defined, and risks are identified and mitigated. In SPEM, this phase can include Task Definitions like "Define System Architecture," "Identify Risks," and "Develop Risk Mitigation Plan," assigned to Role Definitions such as "System Architect" and "Risk Manager."
+
+3. *Construction*: The system is incrementally developed, integrated, and tested. In SPEM, this phase can include Task Definitions like "Develop Features," "Integrate Components," and "Test Increment," assigned to Role Definitions like "Software Developer" and "Test Engineer."
+
+4. *Transition*: The system is deployed, and end-users are trained and supported. In SPEM, this phase can include Task Definitions like "Deploy System," "Train Users," and "Provide Support," assigned to Role Definitions like "Deployment Engineer" and "Training Specialist."
+
+In both methodologies, SPEM **Work Product Definitions** can be used to represent the artifacts produced during the process, such as requirements documents, design documents, source code, test plans, and user manuals. 
+
+By using the SPEM UML profile, organizations can model their software development processes and customize methodologies like the Waterfall model and RUP to better fit their specific needs and context.
+
+
+\subsection{Programming and software engineering technologies and methodologies}
+
+Programming and software engineering technologies and methodologies are the tools, techniques, and approaches used to develop, manage, and maintain software systems. They are designed to improve the quality, efficiency, and effectiveness of the software development process. Here's a list of some commonly used technologies and methodologies in software engineering:
+
+**Programming Languages**
+
+These are the languages used to write software programs. Some popular programming languages include:
+
+1. Python
+2. Java
+3. JavaScript
+4. C++
+5. C#
+6. Ruby
+7. PHP
+8. Swift
+9. Kotlin
+10. TypeScript
+
+**Integrated Development Environments (IDEs)**
+
+These are software applications that provide a comprehensive set of tools for software development, such as code editing, debugging, and version control integration. Some popular IDEs are:
+
+1. Visual Studio Code
+2. IntelliJ IDEA
+3. Eclipse
+4. Xcode
+5. PyCharm
+6. Android Studio
+7. NetBeans
+8. Sublime Text
+9. Atom
+
+**Version Control Systems**
+
+These systems help manage and track changes to software code, allowing developers to collaborate effectively and maintain a history of modifications. Some popular version control systems are:
+
+1. Git
+2. Subversion (SVN)
+3. Mercurial
+4. Perforce
+5. Concurrent Versions System (CVS)
+
+**Software Development Methodologies**
+
+These are structured approaches to software development that help manage and organize the process. Some popular methodologies include:
+
+1. Agile (e.g., Scrum, Kanban, Extreme Programming)
+2. Waterfall
+3. Rational Unified Process (RUP)
+4. Spiral
+5. V-Model
+6. DevOps
+7. Lean Software Development
+
+**Project Management and Collaboration Tools**
+
+These tools help plan, coordinate, and track software development projects, facilitating communication among team members. Some popular tools are:
+
+1. Jira
+2. Trello
+3. Asana
+4. Microsoft Project
+5. Basecamp
+6. Monday.com
+7. ClickUp
+8. GitHub Projects
+
+**Automated Testing and Continuous Integration Tools**
+
+These tools help automate testing and integration processes, improving the quality and efficiency of software development. Some popular tools include:
+
+1. Jenkins
+2. Travis CI
+3. TeamCity
+4. CircleCI
+5. GitLab CI/CD
+6. Selenium
+7. JUnit
+8. TestNG
+
+**Software Design Patterns**
+
+These are reusable solutions to common problems encountered during software design. Some popular design patterns include:
+
+1. Singleton
+2. Factory Method
+3. Abstract Factory
+4. Observer
+5. Strategy
+6. Decorator
+7. Adapter
+8. Facade
+
+**Software Architectures**
+
+These are high-level structures and patterns used to organize software systems. Some popular architectures include:
+
+1. Monolithic
+2. Microservices
+3. Service-Oriented Architecture (SOA)
+4. Layered Architecture
+5. Event-Driven Architecture
+6. Model-View-Controller (MVC)
+7. Model-View-ViewModel (MVVM)
+
+These technologies and methodologies are just a starting point. As a software engineer, it's essential to stay up-to-date with the latest trends and best practices in the industry to continue improving and delivering high-quality software systems.
+
+
+\subsection{Procedural techniques}
+
+Procedural techniques are a programming paradigm that focuses on using procedures (also known as routines, subroutines, or functions) to solve problems. The main idea behind procedural programming is to break down a complex problem into smaller, more manageable tasks. These tasks are then implemented as procedures, which can be called and reused throughout the program. Procedural programming is typically contrasted with object-oriented programming, which focuses on organizing code around objects and their interactions.
+
+Here are some key features of procedural programming:
+
+1. **Sequential Execution**: Procedural programming follows a top-down approach, with code executed line by line in a sequential manner.
+
+2. **Procedures**: The code is organized into reusable procedures, which can be called by other parts of the program. Procedures are typically defined with a specific input (parameters) and output (return value), and they may have local variables.
+
+3. **Modular Design**: Procedural programming promotes modular design, where each procedure is responsible for a specific task. This approach makes it easier to understand, maintain, and modify the code.
+
+4. **Control Structures**: Procedural programming languages provide control structures such as loops (for, while) and conditional statements (if-else) to control the flow of execution.
+
+5. **Global and Local Variables**: Variables in procedural programming can be global (accessible throughout the entire program) or local (accessible only within the procedure in which they are defined). Local variables help to limit the scope of variables and reduce the risk of unintended side effects.
+
+Some popular procedural programming languages include:
+
+1. C
+2. Pascal
+3. Fortran
+4. COBOL
+5. BASIC
+
+Many modern programming languages, such as Python, JavaScript, and Java, also support procedural programming techniques alongside other paradigms like object-oriented and functional programming. This allows programmers to choose the best approach for a given problem or combine paradigms as needed.
+
+To use procedural techniques effectively, keep the following principles in mind:
+
+- Break down complex problems into smaller, more manageable tasks.
+- Encapsulate tasks within well-defined procedures with clear inputs and outputs.
+- Minimize the use of global variables and rely on local variables and procedure parameters to share data.
+- Use control structures like loops and conditional statements to control the flow of execution.
+- Document your procedures to make it easier for others to understand and maintain your code.
+
+
+\subsection{The elements of the RUP methodology, phases and activities}
+
+The Rational Unified Process (RUP) is an iterative and incremental software development methodology that provides a structured approach to managing projects. RUP is organized into four phases, each consisting of several iterations. The methodology is driven by use cases and focuses on managing risk, ensuring quality, and addressing the most critical aspects of the project early on.
+
+RUP is built on six core elements: Roles, Activities, Work Products, Artifacts, Disciplines, and Workflows.
+
+**Phases of RUP:**
+
+1. *Inception*: The main goal of this phase is to establish the project's scope, vision, and business case. Key activities include defining the initial set of requirements, identifying stakeholders, and assessing project feasibility and risks. The inception phase ends with the Lifecycle Objective Milestone, which determines if the project should proceed to the next phase.
+
+2. *Elaboration*: In this phase, the system's architecture is defined, and high-level design decisions are made. The focus is on mitigating risks, refining requirements, and developing a detailed project plan. The elaboration phase ends with the Lifecycle Architecture Milestone, which serves as a checkpoint for architectural stability and overall project health.
+
+3. *Construction*: This phase is where the system is incrementally developed, integrated, and tested. The development team works on implementing use cases, building components, and iteratively testing and refining the system. The construction phase ends with the Initial Operational Capability Milestone, indicating that the system is ready for deployment.
+
+4. *Transition*: In the transition phase, the system is deployed, and end-users are trained and supported. The focus is on fine-tuning the system, addressing any remaining issues, and ensuring a smooth handover to the production environment. The phase ends with the Product Release Milestone, marking the project's completion.
+
+**Activities in RUP:**
+
+Activities in RUP are organized into nine disciplines, which are further divided into specific tasks. The disciplines are:
+
+1. *Business Modeling*: This discipline focuses on understanding the organization's business processes and objectives, helping to align the software solution with business needs.
+
+2. *Requirements*: In this discipline, functional and non-functional requirements are gathered, analyzed, and documented. Use cases are developed to describe the system's behavior from the user's perspective.
+
+3. *Analysis and Design*: This discipline involves designing the system's architecture and components, based on the documented requirements. Design models, class diagrams, and sequence diagrams are created to represent the system's structure and behavior.
+
+4. *Implementation*: In this discipline, the system's components are developed, tested, and integrated. Developers write code, create unit tests, and perform code reviews to ensure quality.
+
+5. *Test*: This discipline focuses on validating that the system meets the specified requirements and is free of defects. Test plans, test cases, and test scripts are created, and various testing techniques (unit, integration, system, and acceptance testing) are employed.
+
+6. *Deployment*: In this discipline, the system is deployed to the production environment and made available to end-users. Deployment plans, installation guides, and user manuals are created to support the deployment process.
+
+7. *Configuration and Change Management*: This discipline involves managing and tracking changes to the system, including requirements, design, code, and documentation. It ensures consistency, traceability, and control throughout the project.
+
+8. *Project Management*: This discipline focuses on planning, organizing, and controlling the project's resources, schedule, and budget. It involves risk management, quality assurance, and progress monitoring.
+
+9. *Environment*: This discipline deals with creating and maintaining the tools, processes, and infrastructure required to support the development team, such as version control systems, build systems, and testing environments.
+
+By following the RUP methodology, organizations can better manage complex software projects, minimize risks, and improve the quality of their software solutions.
 
 
 \section{Set theory basics}
