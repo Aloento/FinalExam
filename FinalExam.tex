@@ -557,6 +557,8 @@ TLB：CPU 的一种缓存，由 MMU 用于改进虚拟到物理地址的转译�
 
 \subsubsection{TCP/IP}
 
+TCP/IP 协议是一个协议簇，包含很多协议，UDP TCP ICMP IP...
+
 \begin{enumerate}
     \item Link (1, 2)
     \item Internet (3)
@@ -643,7 +645,7 @@ TLB：CPU 的一种缓存，由 MMU 用于改进虚拟到物理地址的转译�
 
 \subsubsection{IPv4}
 
-Header 结构：
+Header 最小 20 byte：
 
 \begin{description}
     \item[Version] 4
@@ -678,7 +680,7 @@ Header 结构：
 
 IPsec，更好的 QoS，Stateless IP 配置，Multicast and Anycast
 
-定长 Header 结构：
+定长 Header 4o byte：
 
 \begin{description}
     \item[Version] 4，6
@@ -726,9 +728,13 @@ NAT Behavior：
 
 \subsection{Classless Inter-Domain Routing}
 
-Classful 是 A (x.0.0.1) B (x.x.0.1) C (x.x.x.1)
+无类型域间选路，Classful 是 A (x.0.0.1) B (x.x.0.1) C (x.x.x.1)
 
 子网掩码用于区分网络和主机部分，255.255.255.0 的二进制表示为 11111111.11111111.11111111.00000000，24 个 1 是网络；8 个 0 是主机，则掩码的前缀长度为 24。所以 192.168.1.1 和 255.255.255.0 的 CIDR 为 192.168.1.1/24
+
+127.0.0.0/8 是一个网段，子网掩码为 255.0.0.0。这个网段包含了 127.0.0.0 到 127.255.255.255 的所有 IP 地址。
+
+127.0.0.1/32 是一个单独的 IP 地址，子网掩码为 255.255.255.255，表示只有一个 IP 地址 127.0.0.1。127.0.0.1 也被称为本地回环地址（loopback address）
 
 
 \subsection{Routing}
@@ -738,11 +744,165 @@ Classful 是 A (x.0.0.1) B (x.x.0.1) C (x.x.x.1)
 路由表，存储通往不同网络目的地路径信息的数据结构，当路由器收到数据包时，它在其路由表中查找目的地IP地址，以确定转发数据包的下一跳，它包含：
 
 \begin{description}
-    \item[Destination Network] 
+    \item[Destination / Mask] 目的地网络，可以是一个地址也可以是网段
+
+    \item[Protocol] 获取到本条路由信息的方式，Direct（0），Static（60），OSPF（10）等
+
+    \item[Preference] 对于不同的 路由协议 进行区分，越低越可靠
+
+    \item[Cost] 某个路由都是从相同的协议收到时，则比较开销，不同协议不可比，越小越优
+
+    \item[Next Hop] 下一个节点
+
+    \item[Interface] 出口设备
 \end{description}
 
 
-\subsection{TCP \& UDP}
+\subsubsection{Open Shortest Path First}
+
+在 OSPF 前，广泛使用 RIP（Routing Information Protocol）作为内部网关协议。由于 RIP 是基于距离矢量算法的路由协议，存在着收敛慢、路由环路、可扩展性差等问题，所以被 OSPF 取代。作为基于链路状态的协议，优点：
+
+\begin{enumerate}
+    \item 组播形式收发报文，减少对其它不运行 OSPF 路由器的影响
+    \item CIDR
+    \item 对等价路由进行负载分担
+    \item 报文加密
+\end{enumerate}
+
+
+\subsubsection{Border Gateway Protocol}
+
+在 Autonomous System 间交换 Network Layer Reachability Information 的协议。当运行于同一 AS 内部时，被称为 Internel BGP，不同 AS 之间时，称为 Externel BGP。
+
+发送 BGP 报文的路由设备称为 Speaker，它接收或产生新的路由，并 Advertise 给其他邻居。BGP 通过 TCP 传递，有Open、Update、Notification (Stop)、Keepalive 和 Route-refresh五种报文类型
+
+
+\subsection{Transmission Control Protocol}
+
+Header 20 byte:
+
+\begin{description}
+    \item[Source / Des Port] TCP 不记录 IP
+
+    \item[Sequence Num] 解决 Reordering，已传输的字节数会增加它
+
+    \item[Acknowledgement Num] 确认收到
+
+    \item[Flags] 包的类型，操控状态机
+
+    \item[Window] 滑动窗口，流控
+\end{description}
+
+
+\subsubsection{Handshake}
+
+网络上的传输是没有连接的，只有 连接状态。
+
+\begin{description}
+    \item[三次握手] SYN - SYN - ACK，同步 Inital Seq Num，用这个序号来拼接数据。
+
+    当服务器在 SYN-RCVD 状态但没有收到最后的 ACK 时，会以翻倍的时间重试。Flood 攻击则是创建大量 SYN 连接并下线，可以把 SYN 队列占满。但可以通过 tcp-syncookies 临时应对：通过 Src Des 和 时间戳 制作一个特殊的 Seq Num 发回去，正常连接会把 SYN Cookie 返回，并直接建立连接
+
+    \item[四次挥手] 其实是两次 FIN - ACK，只不过有一方是被动的。
+    
+    如果双方同时 FIN，则进入 Closing 状态，等待 Maximum Segment Lifetime (30s) * 2，确保对方收到了 ACK，有足够的时间让此连接不会跟后面的新连接混淆（有些路由会缓存 IP 数据包，如果连接被重用，那么延迟收到的包就可能与新连接混淆）
+\end{description}
+
+
+\subsubsection{重传}
+
+Receiver 发送给 Sender 的 ACK 只能确认最大的连续收到的包，比如发送了 1 2 3 4 5，收到了 1 2，则回复 ACK 3（是期望接收的下一份数据），随后又收到了 4，但是没有收到 3，此时：
+
+\paragraph{Timeout}
+
+当 Sender 超时没收到 ACK 3，则
+
+\begin{itemize}
+    \item 重传 3
+    \item 重传 3 4 5
+\end{itemize}
+
+两种方案，但是都要等超时，有可能会很久
+
+\paragraph{Fast Retransmit}
+
+所以，不以时间驱动，如果发送方连续收到三次相同的 ACK，就重传
+
+收到 1，回 ACK 2；收到 3，回 ACK 2；4 5 收到，回 ACK 2。则重传 2，回 ACK 6
+
+只解决了时间问题，但是不知道重传一个还是剩下全部
+
+\paragraph{Selective ACK}
+
+所以在 TCP 头里面加一个 SACK，汇报已收到的数据，是一个范围。但是 Receiver 有权 Reneging 数据，所以 Sender 也不能完全依赖 SACK，且 SACK 会消耗 Sender 的资源
+
+\paragraph{Duplicate SACK}
+
+使用 SACK 告诉 Sender 有哪些数据被重复接收了，让其知道
+
+\begin{enumerate}
+    \item 是发出去的包丢了，还是回来的ACK包丢了
+
+    \item Timeout 是否太小了
+
+    \item 网络上出现了 先发的包后到 Reordering 的情况
+
+    \item 网络上是不是把数据包给复制了
+\end{enumerate}
+
+
+\subsubsection{Advertised-Window}
+
+这个字段是 Receiver 告诉 Sender，自己还有多少缓冲区可以接收数据。于是 Sender 就可以根据这个 Receiver 的处理能力来发送数据，而不会导致 Receiver 处理不过来。
+
+如果变成 0 了，则 Sender 会每隔一段时间发送 Zero Window Probe 给 Receiver 来探测对方最新 Window 大小，到一定次数以后会断开连接
+
+Silly Window Syndrome，如果得到的窗口太小了，那么就会当作没有，等到 Window Size >= MSS。如果网络包可以塞满 Maximum Transmission Unit 则可以用满整个带宽，而除去 TCP/IP 头，就得到 Max Segment Size。对于一些需要小包场景的程序，SSH，会关闭 Nagle
+
+
+\subsubsection{Congestion Handling}
+
+TCP不是一个自私的协议，当拥塞发生的时候，要做自我牺牲
+
+\paragraph{Slow Start}
+
+刚加入网络的连接，缓慢地提速
+
+\begin{enumerate}
+    \item Congestion Window = 1，表明可以传一个 MSS 大小的数据
+
+    \item 每当收到一个 ACK，cwnd++
+
+    \item 每当过了一个 Round Trip Time，cwnd * 2
+
+    \item Slow Start Threshold 是一个上限，当 cwnd >= ssthresh 时，就会进入 拥塞避免算法
+\end{enumerate}
+
+\paragraph{Congestion Avoidance}
+
+一般 ssthresh 的值是 65535 kb，当cwnd达到这个值时后
+
+\begin{enumerate}
+    \item 收到一个ACK时，cwnd + 1 / cwnd
+
+    \item 当每过一个RTT时，cwnd++
+\end{enumerate}
+
+\paragraph{当拥塞时}
+
+超过 Retransmission TimeOut 则
+
+\begin{itemize}
+    \item sshthresh = cwnd / 2
+    \item cwnd = 1
+    \item 进入慢启动
+\end{itemize}
+
+
+\subsection{User Datagram Protocol}
+
+
+
 
 
 \subsection{Quality of Service}
