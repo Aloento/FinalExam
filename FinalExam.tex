@@ -813,7 +813,7 @@ Header 20 byte:
 
 Receiver 发送给 Sender 的 ACK 只能确认最大的连续收到的包，比如发送了 1 2 3 4 5，收到了 1 2，则回复 ACK 3（是期望接收的下一份数据），随后又收到了 4，但是没有收到 3，此时：
 
-\paragraph{Timeout}
+\paragraph{Timeout} ~
 
 当 Sender 超时没收到 ACK 3，则
 
@@ -824,7 +824,7 @@ Receiver 发送给 Sender 的 ACK 只能确认最大的连续收到的包，比�
 
 两种方案，但是都要等超时，有可能会很久
 
-\paragraph{Fast Retransmit}
+\paragraph{Fast Retransmit} ~
 
 所以，不以时间驱动，如果发送方连续收到三次相同的 ACK，就重传
 
@@ -832,11 +832,11 @@ Receiver 发送给 Sender 的 ACK 只能确认最大的连续收到的包，比�
 
 只解决了时间问题，但是不知道重传一个还是剩下全部
 
-\paragraph{Selective ACK}
+\paragraph{Selective ACK} ~
 
 所以在 TCP 头里面加一个 SACK，汇报已收到的数据，是一个范围。但是 Receiver 有权 Reneging 数据，所以 Sender 也不能完全依赖 SACK，且 SACK 会消耗 Sender 的资源
 
-\paragraph{Duplicate SACK}
+\paragraph{Duplicate SACK} ~
 
 使用 SACK 告诉 Sender 有哪些数据被重复接收了，让其知道
 
@@ -864,7 +864,7 @@ Silly Window Syndrome，如果得到的窗口太小了，那么就会当作没�
 
 TCP不是一个自私的协议，当拥塞发生的时候，要做自我牺牲
 
-\paragraph{Slow Start}
+\paragraph{Slow Start} ~
 
 刚加入网络的连接，缓慢地提速
 
@@ -878,7 +878,7 @@ TCP不是一个自私的协议，当拥塞发生的时候，要做自我牺牲
     \item Slow Start Threshold 是一个上限，当 cwnd >= ssthresh 时，就会进入 拥塞避免算法
 \end{enumerate}
 
-\paragraph{Congestion Avoidance}
+\paragraph{Congestion Avoidance} ~
 
 一般 ssthresh 的值是 65535 kb，当cwnd达到这个值时后
 
@@ -888,7 +888,7 @@ TCP不是一个自私的协议，当拥塞发生的时候，要做自我牺牲
     \item 当每过一个RTT时，cwnd++
 \end{enumerate}
 
-\paragraph{当拥塞时}
+\paragraph{当拥塞时} ~
 
 超过 Retransmission TimeOut 则
 
@@ -946,9 +946,34 @@ UDP 校验和 的计算方法与 IP 的计算方法，都是 二进制反码运�
 
 \subsection{Quality of Service}
 
-在有限的带宽资源下，为业务提供服务质量的保证。
+在有限的带宽资源下，QoS 针对网络中有突发流量时需要保障重要业务
+
+业务可以分为：
+
+\begin{description}
+    \item[实时] 通常占据固定带宽，对稳定性要求较高
+
+    \item[非实时] 行为难预测，经常出现突发流量，导致网络质量下降，引起拥塞，增加延迟，丢包率
+\end{description}
+
+度量指标：带宽，时延，抖动，丢包率
 
 
+\subsubsection{服务模型}
+
+QoS 模型不是一个具体功能，而是端到端 QoS 设计的一个方案。只有当网络中所有设备都遵循统一的 QoS 服务模型时，才能实现端到端的质量保证。
+
+\begin{description}
+    \item[Best-Effort] 最简单模型，用户可以在任何时候，发出任意数量的报文，网络尽力传递，不提供任何保证，适用于要求不高的业务，默认
+
+    \item[IntServ] 在用户发送报文前，需要通过 Signaling 向网络申请特定的 QoS 服务，网络根据请求预留资源。在收到确认信息后，用户才开始发送报文
+
+    其使用了 Resource Reservation Protocol 在整条线路上预留资源，只有所有的网元都确认，路径才能建立
+
+    \item[DiffServ] 将流量分类，享受不同的处理，同一类业务会被聚合起来统一发送，常用
+
+    业务流的分类和汇聚工作在网络边缘节点完成，其通过多种条件，如源 / 目的地址，协议类型等，灵活的对报文进行标记，而其他节点只需要识别报文中的标记，即可进行资源分配和流量控制
+\end{description}
 
 
 \subsection{Domain Name System}
@@ -1008,6 +1033,8 @@ UDP 校验和 的计算方法与 IP 的计算方法，都是 二进制反码运�
 
 
 \section{Network \& Security}
+
+
 
 
 \section{Databases}

@@ -6,35 +6,6 @@
 \begin{document}
 
 
-\section{Computer network architectures}
-
-Network layers, the OSI and the TCP/IP model. Role and basic operation principles of computer network hardware (network interfaces, repeaters, bridges, hubs, switches, routers, etc.). Operation and characteristics of Ethernet. The 802.11 standards. The Internet Protocol. IP addresses, NAT, CIDR, IPv6. Routing, routing tables. TCP and UDP. QoS parameters, tools and possibilities of maintaining quality of service. The structure and operation of DNS.
-
-
-\subsection{QoS parameters, tools and possibilities of maintaining quality of service}
-
-Quality of Service (QoS) refers to the ability of a network to provide a specific level of performance for different types of traffic. It helps prioritize network traffic, ensuring that critical or latency-sensitive applications receive the necessary resources and perform optimally. QoS parameters are used to measure and enforce the desired level of network performance.
-
-Some common QoS parameters include:
-
-1. **Bandwidth:** The amount of data that can be transmitted over a network link per unit of time. It is usually measured in bits per second (bps).
-2. **Latency:** The time it takes for a data packet to travel from the sender to the receiver. Low latency is essential for real-time applications such as video streaming, online gaming, and VoIP.
-3. **Jitter:** The variation in latency between consecutive packets. Low jitter is crucial for applications that require consistent packet delivery, such as VoIP and video streaming.
-4. **Packet loss:** The percentage of data packets that are lost during transmission. High packet loss can lead to poor quality for real-time applications.
-5. **Reliability:** The ability of a network to deliver data packets without errors or disruptions.
-
-There are several tools and techniques available for maintaining and enforcing QoS in networks:
-
-1. **Traffic classification and marking:** Network traffic is classified into different categories based on characteristics such as protocol, source or destination IP address, and port number. Packets are then marked with priority levels, allowing the network to handle them accordingly.
-2. **Traffic shaping and policing:** These techniques involve controlling the rate at which traffic enters or leaves the network, ensuring that bandwidth is allocated fairly among different traffic flows. Traffic shaping buffers excess traffic, while traffic policing discards packets that exceed the allocated rate.
-3. **Congestion management:** When network congestion occurs, congestion management techniques such as Weighted Fair Queuing (WFQ), Class-Based Weighted Fair Queuing (CBWFQ), and Low Latency Queuing (LLQ) are used to prioritize and schedule the transmission of different traffic classes.
-4. **Congestion avoidance:** To prevent network congestion, mechanisms such as Random Early Detection (RED), Weighted Random Early Detection (WRED), and Explicit Congestion Notification (ECN) are employed. These techniques detect and react to congestion before it becomes severe, selectively dropping or notifying packets based on priority.
-5. **Resource Reservation Protocol (RSVP):** RSVP is a signaling protocol used to reserve network resources for specific traffic flows, ensuring that critical applications have the necessary bandwidth and other resources.
-6. **Differentiated Services (DiffServ):** DiffServ is an architecture for providing QoS in IP networks by marking packets with different priority levels in the IP header. Routers and switches use these markings to prioritize and handle traffic accordingly.
-
-Implementing QoS in a network involves configuring routers and switches to enforce the desired traffic prioritization and resource allocation policies. By doing so, network administrators can ensure that critical and latency-sensitive applications receive the necessary resources, resulting in improved performance and user experience.
-
-
 \section{Network and data security}
 
 Data security, service security, physical security. Security risks of the Internet, attack types and methods of defense. Encrypted and unencrypted communication. Classic encryptions, symmetric and public-key cryptography. Key sharing, Diffie-Hellman key exchange. Encryptions and methods for breaking them (social engineering, brute-force attacks, analytical attacks). Firewalls, their types, operation, and functionality. Internal and external network, DMZ, Security of WLAN networks, techniques, risks.
