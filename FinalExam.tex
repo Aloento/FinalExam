@@ -645,10 +645,10 @@ TCP/IP 协议是一个协议簇，包含很多协议，UDP TCP ICMP IP...
 
 \subsubsection{IPv4}
 
-Header 最小 20 byte：
+Header 最小 20 bytes：
 
 \begin{description}
-    \item[Version] 4
+    \item[Version] 4 bit
 
     \item[Internet Header Length] 4
 
@@ -680,7 +680,7 @@ Header 最小 20 byte：
 
 IPsec，更好的 QoS，Stateless IP 配置，Multicast and Anycast
 
-定长 Header 4o byte：
+定长 Header 40 byte：
 
 \begin{description}
     \item[Version] 4，6
@@ -901,16 +901,110 @@ TCP不是一个自私的协议，当拥塞发生的时候，要做自我牺牲
 
 \subsection{User Datagram Protocol}
 
+Header 8 byte：
 
+\begin{description}
+    \item[Src Port] 在需要对方回信时
 
+    \item[Des Port] 
+
+    \item[Length] 
+
+    \item[Check Sum] 
+\end{description}
+
+特点：
+
+\begin{description}
+    \item[无连接] 不维护连接状态
+
+    \item[没有拥塞控制] 可容忍数据丢失，但不能有较大延迟的实时应用
+
+    \item[不可靠] 没有确认 / 重传机制
+
+    \item[面向 Datagram] 应用层来的报文，添加 Header 后直接传递到 IP 层，反之亦然，既不合并也不拆分，不可分割
+\end{description}
+
+校验：
+
+UDP 校验和 的计算方法与 IP 的计算方法，都是 二进制反码运算求和 再取反。但不同的是，IP 校验和只检验 IP 数据报 和首部，但 UDP 的校验和是把 伪首部 和 数据 一起校验
+
+有一个伪首部包含
+
+\begin{description}
+    \item[Src IP]
+
+    \item[Des IP] 
+
+    \item[0] 
+
+    \item[协议号] 17
+
+    \item[数据报长度] 
+\end{description}
 
 
 \subsection{Quality of Service}
+
+在有限的带宽资源下，为业务提供服务质量的保证。
+
+
 
 
 \subsection{Domain Name System}
 
 
+\subsubsection{层级结构}
+
+匿名根 -> 顶级域名 （通用 / 国家）-> 子域
+
+最开始的域名最后都是带了点号的，比如 www.kernel.org. ，表示根域名服务器
+
+
+\subsubsection{域名服务器}
+
+\begin{description}
+    \item[根] 全球共有 13 个不同 IP 地址的最高层次的域名服务器，从 a 一直到 m，ICANN，Anycast
+
+    根 NS 知道所有的 顶级 NS 的地址。向 Root 请求解析 aloen.to，则会返回 .to 的 Top NS，再向其请求 aloen 的 DNS 记录
+
+    \item[顶级] 负责该顶级域名下注册的二级域名解析
+
+    \item[Authoritative] 子域名解析
+
+    \item[本地] 主机发出 DNS 查询时，首先发给本地 NS
+\end{description}
+
+查询 DNS 但服务器没有结果：
+
+\begin{description}
+    \item[Iterative] DNS 服务器询问其他服务器
+    \item[Recursive] 返回另一个 DNS 服务器地址
+\end{description}
+
+
+\subsubsection{为什么用 UDP}
+
+节省网络资源，一个请求一个应答。DNS 数据包较小，不需要分包，只需要考虑丢包和重试。DNS 报文允许填入序号，请求和其应答报文的序号相同。
+
+
+\subsubsection{常见记录类型}
+
+\begin{description}
+    \item[Address] 映射到 IPv4
+
+    \item[AAAA] IPv6
+
+    \item[Canonical NAME] 映射到另一个域名，别名
+
+    \item[Mail Exchange] 射到邮件服务器
+
+    \item[NS] 指定该域名的授权域名服务器
+
+    \item[TXT] 存储关于域名的任意文本信息
+
+    \item[Pointer] IP 反查
+\end{description}
 
 
 \section{Network \& Security}

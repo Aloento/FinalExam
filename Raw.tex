@@ -35,39 +35,6 @@ There are several tools and techniques available for maintaining and enforcing Q
 Implementing QoS in a network involves configuring routers and switches to enforce the desired traffic prioritization and resource allocation policies. By doing so, network administrators can ensure that critical and latency-sensitive applications receive the necessary resources, resulting in improved performance and user experience.
 
 
-\subsection{The structure and operation of DNS}
-
-The Domain Name System (DNS) is a hierarchical and distributed system used to translate human-readable domain names, such as `www.example.com`, into the IP addresses that computers use to identify each other on the internet, like `192.0.2.1`. DNS is an essential component of the internet infrastructure, as it enables users to access websites and services using easy-to-remember domain names instead of having to remember numerical IP addresses.
-
-**Structure of DNS:**
-
-The DNS hierarchy consists of several components:
-
-1. **Root servers:** At the top of the DNS hierarchy are the root servers. These servers contain information about the top-level domain (TLD) name servers. There are 13 root server clusters, identified by letters A through M, that are distributed globally and operated by various organizations.
-
-2. **Top-level domains (TLDs):** TLDs are the highest level of domain names in the DNS hierarchy, such as `.com`, `.org`, `.net`, and country-code TLDs like `.uk` and `.cn`. TLD name servers are responsible for storing information about the second-level domain name servers under their respective TLDs.
-
-3. **Second-level domains:** These are the domain names directly under a TLD, such as `example.com` or `example.org`. Second-level domain name servers store information about the specific domain, including the IP addresses associated with its subdomains and other resource records.
-
-4. **Subdomains:** Subdomains are subdivisions of a second-level domain, such as `www.example.com` or `mail.example.com`. They can have their own DNS records and can be further divided into lower-level subdomains if necessary.
-
-**Operation of DNS:**
-
-DNS operates using a client-server model. When a user enters a domain name in their web browser or an application tries to resolve a domain name, a DNS query is initiated. The process typically involves the following steps:
-
-1. **DNS resolver:** The client device sends a DNS query to a local DNS resolver, which is typically provided by the user's Internet Service Provider (ISP) or configured manually. The resolver checks its cache to see if it already has the IP address for the requested domain name. If the information is in the cache, the resolver returns the IP address to the client, and the process is complete.
-
-2. **Root server:** If the resolver does not have the information in its cache, it queries one of the root servers. The root server does not provide the IP address for the requested domain but instead returns the address of the TLD name server responsible for the domain's TLD.
-
-3. **TLD name server:** The resolver then queries the TLD name server, which returns the address of the second-level domain's authoritative name server.
-
-4. **Authoritative name server:** Finally, the resolver queries the authoritative name server for the second-level domain. The authoritative name server returns the IP address associated with the requested domain name.
-
-5. **Returning the result:** The resolver stores the IP address in its cache for future use and returns it to the client. The client can now use the IP address to establish a connection with the destination server and request the desired resource.
-
-The DNS system is critical to the functioning of the internet, as it provides a way to translate user-friendly domain names into IP addresses that computers use to communicate with each other. The distributed and hierarchical nature of DNS enables it to scale with the growth of the internet and provide a robust and reliable service.
-
-
 \section{Network and data security}
 
 Data security, service security, physical security. Security risks of the Internet, attack types and methods of defense. Encrypted and unencrypted communication. Classic encryptions, symmetric and public-key cryptography. Key sharing, Diffie-Hellman key exchange. Encryptions and methods for breaking them (social engineering, brute-force attacks, analytical attacks). Firewalls, their types, operation, and functionality. Internal and external network, DMZ, Security of WLAN networks, techniques, risks.
