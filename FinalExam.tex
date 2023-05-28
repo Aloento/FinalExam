@@ -1050,13 +1050,190 @@ QoS 模型不是一个具体功能，而是端到端 QoS 设计的一个方案�
 
 \subsection{Service Security}
 
+免受如 APP，API 的未经授权访问或破坏与漏洞
 
+\begin{enumerate}
+    \item 定期进行漏洞扫描和补丁
+
+    \item 在软件开发时进行安全测试
+
+    \item 部署防火墙，IDS，IPS
+
+    \item 网段隔离
+
+    \item 对设备和程序进行安全配置
+\end{enumerate}
 
 
 \subsection{Physical Security}
 
+防止盗窃，损坏，未经授权的访问
+
+\begin{description}
+    \item[安全设施] 访问控制，监控摄像，报警器
+
+    \item[访问控制系统] 读卡器，生物识别等
+
+    \item[安保人员] 监视和 Patrol
+
+    \item[环境控制] Fire Suppression Systems，Uninterruptible Power Supplies，Air Conditioning
+
+    \item[Asset Management \& Tracking]
+\end{description}
 
 
+\subsection{Security Risks of the Internet}
+
+\begin{description}
+    \item[Data Breaches] 未经授权的访问，导致身份信息被盗，财产损失等
+
+    \item[Malware] Viruses, Worms, Trojans, Ransomware, Spyware
+
+    \item[Phishing \& Social Engineering] Deceptive tactics used to trick users into revealing sensitive information or performing actions that compromise security.
+
+    \item[Distributed Denial of Service] 流量攻击
+
+    \item[Insider Threats] 员工权限滥用
+\end{description}
+
+
+\subsection{Intrusion Detection Systems}
+
+依照一定的安全策略，对网络、系统的运行状况进行监视，尽可能发现各种攻击企图、攻击行为或者攻击结果。是一个旁路监听设备。IDS 应当挂接在所有所关注的流量都必须流经的链路上，尽可能靠近攻击源、尽可能靠近受保护资源
+
+这些位置通常是：
+
+\begin{enumerate}
+    \item 服务器区域的交换机上
+    \item Internet 接入路由器之后的第一台交换机上
+    \item 重点保护网段的局域网交换机上
+\end{enumerate}
+
+
+\subsection{Intrusion Prevention Systems}
+
+对防病毒软件和防火墙的补充，够监视网络传输，串行部署，能够即时的中断、调整或隔离一些非法的传输行为。
+
+可以根据预先设定的安全策略，对流经的每个报文进行深度检测（协议分析跟踪、特征匹配、流量统计分析、事件关联分析等），如果一旦发现隐藏于其中网络攻击，可以根据该攻击的威胁级别立即采取抵御措施。
+
+这些措施包括：
+
+\begin{enumerate}
+    \item 向管理中心告警
+    \item 丢弃该报文
+    \item 切断此次应用会话
+    \item 切断此次TCP连接
+\end{enumerate}
+
+
+\subsection{Classic Encryptions}
+
+\begin{description}
+    \item[Caesar Cipher] 偏移替换，每个字母都有固定替换
+
+    \item[Vigenère] 由一些偏移量不同的凯撒密码组成
+\end{description}
+
+
+\subsection{Symmetric Cryptography}
+
+
+\subsubsection{Advanced Encryption Standard}
+
+密钥长度可以是 128 192 256 位，加密过程简单描述：
+
+\begin{description}
+    \item[SubBytes] 将明文中每个字节替换成一个固定的，从 S盒 中查到的值
+    
+    \item[ShiftRows] 将每行的字节循环位移，使得每个字节都出现在不同的列
+
+    \item[MixColumns] 将每列中的字节进行线性变换，使得每个字节都参与到混淆中
+
+    \item[AddRoundKey] 将每一轮的密钥与每个字节进行异或操作，以增加强度
+\end{description}
+
+128 位的密钥 10 轮加密，192 位 12 轮，256 位 14 轮
+
+在逆变换中，只有 AddRoundKey 与加密过程相同
+
+
+\subsubsection{Substitution Box}
+
+代换盒，由一张固定的表格构成，用于将输入的位序列映射到输出的位序列。在 AES 中，S 盒是通过多种加密学原理和技术精心构造的，以确保其具有良好的加密性质和统计性质。其包含了 256 个元素，每个元素都是一个 8 位的二进制数
+
+
+\subsection{RSA}
+
+三个人名
+
+组成：
+
+\begin{description}
+    \item[Message] $M$
+
+    \item[Ciphertext] 密文 $C$
+
+    \item[Public / Private] Key
+
+    \item[Encryption / Decryption] 算法
+\end{description}
+
+产生密钥：
+
+\begin{enumerate}
+    \item 随机选择两个不同的素数，$p = 103$，$q = 97$
+
+    \item $n = p * q = 9991$
+
+    \item 计算欧拉函数 $\varphi(n) = (p - 1)(q - 1) = 9792$
+
+    \item 随机选择一个 $e = 1213$，$\varphi(n)$ 与 $e$ coprime ($gcd(a, b) = 1$) 且 $1 < e < \varphi(n)$
+
+    \item 求 $ed - k\varphi(n) = 1$ 整数解：$k = 510, d = 4117$
+
+    \item 公钥 (e, n) = (1213, 9991)
+    
+    \item 私钥 (d, n) = (4117, 9991)
+\end{enumerate}
+
+加密：
+
+令 $M = 6$，得到 $C = M^e (mod ~n)$
+
+$= 6^{1213} (mod ~9991) = 7863$
+
+解密：
+
+$M = C^d ~mod ~n = 7683^{4117} ~mod ~9991 = 6$
+
+
+\subsection{Diffie-Hellman}
+
+基于 Discrete logarithm Problem 的困难性
+
+\begin{enumerate}
+    \item 双方协商 大质数 G 和 Primitive Root N
+
+    G = 13，N = 7
+
+    \item 甲 选择一个私有整数 a = 2
+
+    $A = G^a ~mod ~N = 13^2 ~mod ~7 = 1$
+
+    \item 乙 选择一个私有整数 b = 3
+
+    $B = 13^3 ~mod ~7 = 6$
+
+    \item 双方交换 A B
+
+    \item 甲 使用 B 计算密钥
+
+    $K = B^a ~mod ~N = 6^2 ~mod ~7 = 1$
+
+    \item 乙 使用 A 计算密钥
+
+    $K = A^b ~mod ~N = 1^3 ~mod ~7 = 1$
+\end{enumerate}
 
 
 \section{Databases}
