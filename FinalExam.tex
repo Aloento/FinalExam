@@ -16,6 +16,8 @@
 
 \setlength{\parindent}{0em}
 
+\usepackage{float}
+
 \begin{document}
 
 
@@ -625,7 +627,7 @@ TCP/IP 协议是一个协议簇，包含很多协议，UDP TCP ICMP IP...
 
 \subsubsection{Quadrature Amplitude Modulation}
 
-在两个正交载波上进行幅度调制的调制方式，通常是相位差为 90 度的正弦波，星座图上每一个星座点对应发射信号集中的一个信号，星座点数越多，能传输的信息量就越大
+在两个 Orthogonal 载波上进行幅度调制的调制方式，通常是相位差为 90 度的正弦波，星座图上每一个星座点对应发射信号集中的一个信号，星座点数越多，能传输的信息量就越大
 
 
 \subsubsection{Orthogonal Frequency Division Multiple Access}
@@ -1321,8 +1323,415 @@ $M = C^d ~mod ~n = 7683^{4117} ~mod ~9991 = 6$
 
 通过创建一个虚假的同名或相似的 Wi-Fi 接入点，欺骗用户接入从而窃取敏感信息
 
+Wi-Fi 一词是没有任何意义，也没有全写的
+
 
 \section{Databases}
+
+
+\subsection{数据独立性}
+
+物理：
+
+\begin{itemize}
+    \item 程序独立于数据
+
+    \item 程序不了解如何储存数据
+
+    \item 数据由 DBMS 管理储存
+
+    \item 物理储存改变，程序无需改变
+\end{itemize}
+
+逻辑：
+
+\begin{itemize}
+    \item 程序与数据库的逻辑结构相互独立
+
+    \item 数据逻辑结构改变，程序无需改变
+\end{itemize}
+
+重要性：
+
+\begin{itemize}
+    \item 低维护成本
+
+    \item 安全稳定
+
+    \item 结构化
+
+    \item 层次化
+
+    \item 减少冗余
+
+    \item 易扩展
+\end{itemize}
+
+
+\subsection{三级 Schema}
+
+\begin{description}
+    \item[Physical] 
+    内模式（储存模式），物理（内部）级
+    
+    描述了数据在磁盘上的存储方式和物理结构
+
+    \item[Conceptual]
+    概念模式（逻辑模式），概念（逻辑）级
+    
+    全局视图，对逻辑结构和特征的描述，DDL
+
+    \item[External]
+    外模式（用户模式），用户（视图）级
+
+    用户看到的数据视图，概念模式的子集，包含特定用户使用的那部分数据，DML
+\end{description}
+
+
+\subsection{关系模型}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{RelationalModel.jpg}
+    \caption{Relational Model}
+\end{figure}
+
+\begin{description}
+    \item[Attribute] Column
+    \item[Relation] Table
+    \item[Tuple] Row
+    \item[Degree] Count(Column)
+    \item[Cardinality] Count(Row)
+    \item[Domain] 数据类型，约束等
+    \item[Relation Key] 主键外键
+    \item[Relation Schema] 表名 和 其中的列
+    \item[Relation Instance] 表中的数据
+\end{description}
+
+
+\subsection{SQL}
+
+Data Definition Language 定义
+
+\begin{itemize}
+    \item CREATE
+    \item ALTER
+    \item DROP
+    \item TRUNCATE
+\end{itemize}
+
+Data Manipulation Language 操作
+
+\begin{itemize}
+    \item INSERT
+    \item UPDATE
+    \item DELETE
+\end{itemize}
+
+Data Control Language 权限
+
+\begin{itemize}
+    \item GRANT
+    \item REVOKE
+\end{itemize}
+
+Transaction Control Language 事务
+
+\begin{itemize}
+    \item COMMIT
+    \item ROLLBACK
+    \item SAVEPOINT
+\end{itemize}
+
+Data Query Language 查询
+
+\begin{itemize}
+    \item SELECT
+\end{itemize}
+
+
+\subsection{索引}
+
+Clustered Index
+
+\begin{itemize}
+    \item 行的物理与逻辑顺序相同
+    \item 一个表只有一个
+    \item Primary Key 默认
+\end{itemize}
+
+Nonclustered Index
+
+\begin{itemize}
+    \item 储存的是指向行的指针
+    \item UNIQUE 默认
+\end{itemize}
+
+Covering Indexes
+
+\begin{itemize}
+    \item 索引中包含了要查询的字段
+\end{itemize}
+
+
+\subsection{Normalization}
+
+消除冗余，inconsistent 的依赖关系
+
+
+\subsubsection{不一致}
+
+用户在 Customer 表中查找 Address 是合理的  
+但是在这里查找 负责这个客户的 员工的 Salary 就不合理了  
+这应该去 Employee 表中查找
+
+不一致的依赖关系 会使数据难以访问
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \hline
+        学号 & 教师 & 咨询室 & 课程 1 & 课程 2 & 课程 3 \\
+        \hline
+        S1 & T1 & R1 & C1 & C2 & C3 \\
+        \hline
+        S2 & T2 & R2 & C1 & C2 & C4 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+
+\subsubsection{1NF}
+
+每一个字段都是最小的，不包含其他字段，不重复
+
+\begin{itemize}
+    \item 消除重复的列
+    \item 为相关数据单独建表
+    \item 使用主键标识每组相关数据
+\end{itemize}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        学号 & 教师 & 咨询室 & 课程 \\
+        \hline
+        S1 & T1 & R1 & C1 \\
+        \hline
+        S1 & T1 & R1 & C2 \\
+        \hline
+        S1 & T1 & R1 & C3 \\
+        \hline
+        S2 & T2 & R2 & C1 \\
+        \hline
+        S2 & T2 & R2 & C2 \\
+        \hline
+        S2 & T2 & R2 & C4 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+
+\subsubsection{2NF}
+
+消除重复的行
+
+\begin{itemize}
+    \item 为应用于多条记录的值，创建单独的表
+    \item 用外键连接这些表
+\end{itemize}
+
+Student
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        学号 & 教师 & 咨询室 \\
+        \hline
+        S1 & T1 & R1 \\
+        \hline
+        S2 & T2 & R2 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Course
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        学号 & 课程 \\
+        \hline
+        S1 & C1 \\
+        \hline
+        S1 & C2 \\
+        \hline
+        S1 & C3 \\
+        \hline
+        S2 & C1 \\
+        \hline
+        S2 & C2 \\
+        \hline
+        S2 & C4 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+
+\subsubsection{3NF}
+
+消除与主键无关的数据：咨询室是与学生编号无关的数据
+
+Student
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        学号 & 教师 \\
+        \hline
+        S1 & T1 \\
+        S2 & T2 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+Teacher
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        教师 & 咨询室 \\
+        \hline
+        T1 & R1 \\
+        T2 & R2 \\
+        \hline
+    \end{tabular}
+\end{table}
+
+
+\subsubsection{Boyce-Codd}
+
+在 3NF 的基础上，每个属性都不传递依赖
+
+StorehouseManage (WarehouseID, ItemID, AdminID, Num)
+
+每个管理员只在一个仓库工作，一个仓库储存多个物品，则存在关系
+
+\begin{itemize}
+    \item (WarehouseID, ItemID) $\to$ (AdminID, Num)
+
+    \item (AdminID, ItemID) $\to$ (WarehouseID, Num)
+\end{itemize}
+
+所以有两组候选关键字，唯一非关键字是 Num，符合 3NF，但是存在 (WarehouseID) $\leftrightarrow$ (AdminID) 关键字决定关键字的情况，循环传递依赖
+
+异常：
+
+\begin{description}
+    \item[删除] 清空仓库会导致 WarehouseID AdminID 被删除
+
+    \item[插入] 仓库无物品时，无法分配管理员
+
+    \item[更新] 换管理员，则修改全表
+\end{description}
+
+修改：
+
+\begin{itemize}
+    \item StoreManage (WarehouseID, AdminID)
+
+    \item Warehouse (WarehouseID, ItemID, Num)
+\end{itemize}
+
+
+\subsubsection{4NF}
+
+消除 Multi-Valued Dependency，最简单的是多对多
+
+
+\subsection{Entity Relationship}
+
+\begin{description}
+    \item[Entity] 矩形，表
+    \item[Attribute] 椭圆，列
+    \item[Relationship] 菱形，表之间的关系
+    \item[Computed] 虚线，计算得出的属性
+    \item[Multi Value] 双椭圆，多值属性
+    \item[Optional] 可选属性
+    \item[Composite] 矩形内加一个菱形，多对多联系
+    \item[Weak] 双层矩形，依赖另一个实体存在
+\end{description}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{ER2.png}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{ER.jpg}
+\end{figure}
+
+画图步骤
+
+\begin{enumerate}
+    \item Entity Identification 找实体
+    \item Relationship Identification 找关系
+    \item Cardinality Identification 一对多之类的
+    \item Identify Attributes 找列
+    \item Create ER Diagram 画图
+\end{enumerate}
+
+
+\subsection{数据仓库}
+
+Online Analytical Processing，使用数据库系统来帮助洞察业务，如 Redshift，主要用于数据分析
+
+数据仓库是为只读优化的
+
+\begin{description}
+    \item[事实表] 含有大量的数据，并且是可以汇总，并被记录的
+
+    \item[维度表] 分析数据的窗口，包含事实表中记录的属性
+
+    \item[Star] 一张事实表和多张维度表组成
+
+    \item[Snowflake] 每一个维度表都可以向外连接多个子维度表
+
+    \item[Galaxy] 多个事实表版本的星型模型，多张事实表共用模型中的维度表
+\end{description}
+
+
+\subsubsection{Data Cube}
+
+表示那些很大的数据集合，储存多维度数据
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{Cube.png}
+\end{figure}
+
+\begin{description}
+    \item[Drill Down] 季度总销售 $\to$ 每个月
+
+    \item[Roll Up] 4 5 6 月 $\to$ 第二季度
+
+    \item[Slice] 只分析电子产品
+
+    \item[Dice] 第一和第二季度
+
+    \item[Rotate] 产品与地区互换维度
+\end{description}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{Action.png}
+\end{figure}
 
 
 \section{Algorithms \& Data Structures}
