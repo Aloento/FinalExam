@@ -18,6 +18,16 @@
 
 \usepackage{float}
 
+\usepackage{minted}
+
+\usemintedstyle{colorful}
+
+\setminted{
+    frame=lines,
+    breaklines,
+    fontsize=\footnotesize
+}
+
 \begin{document}
 
 
@@ -1328,6 +1338,7 @@ Wi-Fi 一词是没有任何意义，也没有全写的
 
 \section{Databases}
 
+\url{https://Aloen.to/Database/MSSQL/MSSQL-练习题/}
 
 \subsection{数据独立性}
 
@@ -1728,13 +1739,231 @@ Online Analytical Processing，使用数据库系统来帮助洞察业务，如 
     \item[Rotate] 产品与地区互换维度
 \end{description}
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \includegraphics[width=\linewidth]{Action.png}
 \end{figure}
 
 
 \section{Algorithms \& Data Structures}
+
+
+\subsection{The concept of algorithms, the description of an algorithm}
+
+算法类似于食谱，每一步都是为了达成预期而需要采取的具体行动，其包括一组输入，并对输入进行操作，产生输出。它必须定义明确，有具体目的，且能在合理时间使用合理资源完成任务。
+
+
+\subsection{Turing machines}
+
+\begin{itemize}
+    \item abstract models for real computers having an infinite memory (in the form of a tape) and a reading head
+
+    \item has finite number of internal states
+
+    \item has distinguished starting and final states
+
+    \item has transition functions
+\end{itemize}
+
+\begin{itemize}
+    \item accepts the initial content of the tape if it terminates in an accepting state
+
+    \item 如果没有匹配的规则，则终止
+
+    \item 如果对某个状态和输入符号集，有多个匹配规则，则 Non-Deterministic
+
+    \item 所有的 ND 都有等价的 确定
+\end{itemize}
+
+
+\subsubsection{Halting Problem}
+
+属于 Computability Theory，判断任意一个程序是否能在有限的时间之内结束运行。Traveling Salesman Problem 不是
+
+
+\subsection{Efficiency of algorithms, basics of complexity theory}
+
+算法会消耗时间和内存，复杂度就是衡量消耗的指标
+
+
+\subsubsection{时间复杂度}
+
+时间复杂度主要是循环导致的，O 表示了增长变化趋势，下面列出的复杂度递增，效率递减
+
+\begin{description}
+    \item[常数阶 $O(1)$] ~
+
+    \begin{minted}{js}
+        let i = 1;
+        i = i + 1;
+    \end{minted}
+
+    没有循环
+
+    \item[对数阶 $O(\log N)$] ~
+
+    \begin{minted}{js}
+        let i = 1;
+        while (i < n)
+          i = i * 2;
+    \end{minted}
+
+    循环 x 次后，i > n，则 $2^x > n$，即 $x > \log_2 (n)$
+
+    \item[线性阶 $O(N)$] ~
+
+    \begin{minted}{js}
+        for (let i = 0; i < n; i++)
+          console.log(i);
+    \end{minted}
+
+    循环 n 次
+
+    \item[线性对数阶 $O(N \log N)$] ~
+
+    \begin{minted}{js}
+        for (let i = 1; i < n; i = i * 2)
+          for (let j = 0; j < n; j++)
+            console.log(j);
+    \end{minted}
+
+    把 $O(\log N)$ 的代码，再循环 N 次
+
+    也可以把 $O(N)$ 的代码，再循环 $\log N$ 次
+
+    \item[平方阶 $O(N^2)$] ~
+
+    \begin{minted}{js}
+        for (let i = 0; i < m; i++)
+          for (let j = 0; j < n; j++)
+            console.log(j);
+    \end{minted}
+
+    把 $O(N)$ 的代码，再循环 N 次
+
+    当然也可以是 $m \times n$
+\end{description}
+
+其他的包括但不限于
+
+\begin{itemize}
+    \item K 次方阶 $O(N^k)$
+
+    \item 指数阶 $O(2^N)$ 一般是递归算法
+
+    \item $O(3^N)$
+\end{itemize}
+
+
+\paragraph{计算} ~
+
+$T(n)$：算法的执行次数
+
+$T(n) = O(f(n))$
+
+\begin{description}
+    \item[嵌套循环] ~
+
+    由内向外分析，并相乘
+
+    \begin{minted}{js}
+        // O(n)
+        for (let i = 0; i < n; i++)
+          // O(n)
+          for (let j = 0; j < n; j++)
+            console.log(j); // O(1)
+    \end{minted}
+
+    时间复杂度为 $O(n \times n \times 1) = O(n^2)$
+
+    \item[顺序执行] ~
+
+    把它们的时间复杂度相加
+    
+    不要求精度 = 最大的时间复杂度
+
+    \begin{minted}{js}
+        // O(n)
+        for (let i = 0; i < n; i++)
+          console.log(i);
+
+        // O(n^2)
+        for (let i = 0; i < n; i++)
+          for (let j = 0; j < n; j++)
+            console.log(j);
+    \end{minted}
+
+     $O(n + n^2)$ 或 $O(n^2)$
+
+    \item[条件分支] ~
+
+    最麻烦的那个情况
+
+    \begin{minted}{js}
+        if (n > 10)
+          // O(n)
+          for (let i = 0; i < n; i++)
+            console.log(i);
+        else
+          // O(1)
+          console.log(n);
+    \end{minted}
+
+    $O(n)$
+\end{description}
+
+
+\subsubsection{空间复杂度}
+
+\begin{description}
+    \item[$O(1)$] ~
+
+    \begin{minted}{js}
+        let i = 1;
+        i = i + 1;
+    \end{minted}
+
+    变量所分配的空间，都不随数据量的变化而变化
+
+    \item[$O(N)$] ~
+
+    \begin{minted}{js}
+        let arr = [];
+        for (let i = 0; i < n; i++)
+          arr.push(i);
+    \end{minted}
+
+    看到数组就表明，空间是随着 n 增大而增大的
+\end{description}
+
+所以，如果 n 增大，程序占用的空间
+
+\begin{itemize}
+    \item 不变，$O(1)$
+
+    \item 成线性增长，$O(N)$
+
+    \item 成平方增长，$O(N^2)$
+\end{itemize}
+
+以此类推，也有 $O(N + M)$, $O(\log N)$等
+
+
+\subsection{Approaches to algorithm construction}
+
+\begin{description}
+    \item[Brute Force] 尝试所有可能方案，直到可行，不一定有效
+
+    \item[Divide and Conquer] 将问题分解成多个子问题，并分别解决，再结合起来
+
+    \item[Greedy] 对每一步做出 Locally Optimal 解，但不一定是全局最优
+
+    \item[Dynamic Programming] 动态规划，试图仅解决每个子问题一次，从而减少计算量，对有重复子问题非常有效
+
+    \item[Backtracking] 寻找所有解决方案，依次尝试，当不正确时，进行回溯
+
+    \item[Randomized] 如随机化寻找优化问题的近似解
+\end{description}
 
 
 \section{Graph Algorithms}
