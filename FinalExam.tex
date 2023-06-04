@@ -1755,6 +1755,8 @@ Online Analytical Processing，使用数据库系统来帮助洞察业务，如 
 
 \subsection{Turing machines}
 
+\url{https://aloen.to/Algorithm/TM/Turing-Machines/}
+
 \begin{itemize}
     \item abstract models for real computers having an infinite memory (in the form of a tape) and a reading head
 
@@ -1964,6 +1966,66 @@ $T(n) = O(f(n))$
 
     \item[Randomized] 如随机化寻找优化问题的近似解
 \end{description}
+
+
+\subsection{Linear data structures}
+
+\begin{description}
+    \item[Lists] 一种特定类型的集合，有序可重复，用数组或链表
+
+    \item[Collections] 任何元素的分组，可能有序 / 无序，重复 / 唯一，各种数据结构 Set Map
+    
+    \item[First-In-First-Out] Queue，先进先出
+    
+    \item[Last-In-First-Out] Stack，后进先出
+    
+    \item[Binary Heap] 是完全二叉树，从左到右填充
+\end{description}
+
+\url{https://Aloen.to/Algorithm/Basics-of-Computer-Science/#Sorting-algorithms-and-their-complexity}
+
+
+\subsection{Search in hash tables}
+
+储存键值对，O(1)，先将数据映射成它的哈希值
+
+解决碰撞：
+
+\begin{description}
+    \item[Separate Chaining] 将哈希值相同的数据元素存放在一个链表中，当查找到这个链表时，必须采用线性查找，需要额外空间和时间
+
+    \item[Open Addressing] 如果两个数据元素的哈希值相同，会生成另一个哈希值，容易出现哈希值被连续占用，不适用于大量数据
+\end{description}
+
+
+\subsection{Binary Search Tree}
+
+在二叉查找树中：
+
+\begin{itemize}
+    \item 左子树所有节点小于根节点
+
+    \item 右子树所有节点大于根节点
+
+    \item 任意子节点均为二叉查找树
+
+    \item 没有相同的节点
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5 \linewidth]{BST.png}
+\end{figure}
+
+
+\subsection{AVL Tree}
+
+
+
+
+\subsection{Red-Black Tree}
+
+
 
 
 \section{Graph Algorithms}
