@@ -2354,6 +2354,91 @@ Call Stack 是管理函数调用关系的结构，保证调用顺序和追踪
 \section{Compilers}
 
 
+\subsection{Chomsky Classification}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+文法 & 语言 & 类型 & 产生式规则 \\
+\hline
+0 & 递归可枚举 & 图灵机 & $\alpha \rightarrow \beta$ \\
+\hline
+1 & 上下文相关 & 线性有界非确定图灵 & $\alpha A \beta \rightarrow \alpha \gamma \beta$ \\
+\hline
+2 & 上下文无关 & 非确定下推自动机 & $A \rightarrow \gamma$ \\
+\hline
+3 & 正则 & 有限状态自动机 & $A \rightarrow aB$ \\
+& & & $A \rightarrow a$ \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\subsection{Regular Languages}
+
+\begin{itemize}
+    \item 空集合 Ø 是正则语言
+    \item 只包含一个空串 $\epsilon$ 的是正则语言
+\end{itemize}
+
+
+\subsection{relation to lexical analyzer programs}
+
+Tokenizer 将一连串的符号分解为一连串的标记，然后传递给 Parser，生成 AST
+
+正则语言可以描述定义编程语言符号的模式和规则，正则表达式是一种方式
+
+\url{https://juejin.cn/post/6844904035271573511}
+
+
+\subsection{Finite automata}
+
+Finite-State Machine 被用来识别正则语言
+
+\begin{description}
+    \item[Deterministic] 对每个状态和输入都有确定的下一个状态
+
+    \item[Nondeterministic] 可以到不同的下一个状态，有 $\epsilon$ 过度，不消耗输入
+\end{description}
+
+
+\subsection{The structure of compilers}
+
+翻译高级代码至低级语言
+
+\begin{description}
+    \item[Lexical] 词法分析
+    \item[Syntax] 语法分析，AST
+    \item[Semantic] 检查语法正确，类型检查等
+    \item[Intermediate] 与平台无关的中间代码
+    \item[Optimization] 提高性能等
+    \item[Generation] 生成目标机器码
+\end{description}
+
+
+\subsection{the process of compilation or interpretation}
+
+\begin{description}
+    \item[Compilation] 代码在执行前被翻译成机器码，运行的快
+
+    \item[Interpretation] 解释，直接执行源码，JS
+\end{description}
+
+Java 之类使用 IL，预编译
+
+
+\subsection{Look-Ahead}
+
+在 parsing 阶段，根据 parser 的当前状态来预测输入，在出现歧义的情况下应用哪条规则，理解更复杂的语法，k 代表可以提前看的标记数量
+
+\begin{description}
+    \item[LL(k)] top-down，Left-to-right, Leftmost derivation
+
+    \item[LR(k)] bottom-up，L2R, Rightmost derivation
+\end{description}
+
+
 \section{System Engineering}
 
 
