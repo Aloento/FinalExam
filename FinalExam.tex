@@ -1755,7 +1755,7 @@ Online Analytical Processing，使用数据库系统来帮助洞察业务，如 
 
 \subsection{Turing machines}
 
-\url{https://aloen.to/Algorithm/TM/Turing-Machines/}
+\url{https://Aloen.to/Algorithm/TM/Turing-Machines/}
 
 \begin{itemize}
     \item abstract models for real computers having an infinite memory (in the form of a tape) and a reading head
@@ -2012,26 +2012,337 @@ $T(n) = O(f(n))$
     \item 没有相同的节点
 \end{itemize}
 
-\begin{figure}
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.5 \linewidth]{BST.png}
 \end{figure}
 
-
-\subsection{AVL Tree}
-
+在树种查找只需要判断节点大小。左下最小，右下最大
 
 
+\subsubsection{删除节点}
 
-\subsection{Red-Black Tree}
+删除一个节点，还要让 BST 保持正确结构
+
+\begin{itemize}
+    \item 没有子树，直接删掉
+
+    \item 只有单侧子树，孩子顶替
+
+    \item 左右子树，后继节点顶替
+\end{itemize}
+
+后继节点就是在中序遍历时的下一个节点。找 A 的后继节点，则从 A 的右子树开始，一路向左走，走到没有左子树为止
 
 
+\subsection{234 / RB Tree}
+
+BV1BB4y1X7u3 / BV1Ce4y1Q76H
 
 
 \section{Graph Algorithms}
 
 
+\subsection{The concept of a graph, its representations and visualization}
+
+$G=(V,E)$ where V is finite and not empty set, V = edges, E = vertices
+
+Graph Representations
+
+\begin{itemize}
+    \item Drawing
+    \item Edge and Vertex List
+    \item Adjacency Matrix
+\end{itemize}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{1.png}
+\end{figure}
+
+
+\subsection{Euler Path}
+
+欧拉路径也就是一笔画问题，回路则需要回到起点
+
+它遍历每条边，顶点可以经过多次
+
+对于无向图：
+
+\begin{description}
+    \item[Path] 奇数度数的点只能有 0 个或 2 个
+
+    \item[Circuit] 不能有奇数度数点
+\end{description}
+
+对于 Directed：
+
+\begin{description}
+    \item[Path] 出等于入 or 起点出比入多 1，终点入比出多 1，其余的相等
+
+    \item[Circuit] 出等于入
+\end{description}
+
+
+\subsubsection{Hierholzer}
+
+算法，$O(V + E)$
+
+\begin{enumerate}
+    \item 从有欧拉路径的点出发
+
+    \item 深度优先遍历整个图，经过的顶点不再遍历
+
+    \item 若点没有可遍历的邻居，将此点入栈，并删除
+\end{enumerate}
+
+
+\subsection{Hamiltonian Path}
+
+哈密顿路径强调的是经过每个顶点一次，是 NP 完全问题，一般使用枚举
+
+回溯搜索是深度优先搜索的一种，但在求解过程中不保留完整的树结构，而 DFS 则记下完整的搜索树
+
+对于求路径来说，起始点是谁很重要，同一个图，从有的起始点出发就存在，从有的起始点出发就不存在
+
+
+\subsection{Tree Graphs}
+
+树是一种无向、无循环的连接图，在树的任何两个顶点之间都有唯一的路径
+
+
+\subsection{Fundamental graph algorithms}
+
+\begin{description}
+    \item[Pre] XLR
+    \item[Mid] LXR
+    \item[Post] LRX
+\end{description} 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{DFS.png}
+    \caption{Depth-First-Search}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{BFS.png}
+    \caption{Breadth-First Search}
+\end{figure}
+
+
+\subsection{Optimal spanning trees}
+
+最小生成树问题是指在一个加权无向连通图中找到一棵包含所有节点且边的权值和最小的生成树
+
+
+\subsubsection{Prim}
+
+贪心算法 $O(V^2)$
+
+\begin{enumerate}
+    \item 选择一个顶点作为起点
+
+    \item 选择所有与生成树相邻中权重最小的一条边
+\end{enumerate}
+
+\url{https://zh.wikipedia.org/wiki/普林姆算法#例示}
+
+
+\subsubsection{Kruskal}
+
+贪心算法 $O(E \log V)$
+
+\begin{enumerate}
+    \item 将所有边从小到大排序
+
+    \item 依次选择边，如果该边的两个顶点不在同一个连通块中，则加入
+\end{enumerate}
+
+\url{https://zh.wikipedia.org/wiki/克鲁斯克尔演算法#示例}
+
+
+\subsection{Shortest paths}
+
+最短路径算法是用来寻找带有加权边的图中两个顶点之间的最短路径
+
+
+\subsubsection{Dijkstra}
+
+\begin{minted}{js}
+A --5-- B
+|       |
+4       6
+|       |
+C --5-- D
+\end{minted}
+
+首先，将 A 设为原点，并初始化每个顶点到原点的距离为 \infty
+
+\begin{minted}{js}
+/** 每个顶点到原点的距离 */
+let dist: Record<string, number> = {
+  A: 0,
+  B: Infinity,
+  C: Infinity,
+  D: Infinity,
+};
+
+/** 获取两个顶点之间的权重 */
+declare function weight(node1: string, node2: string): number;
+\end{minted}
+
+接下来，不断迭代更新每个点到原点的最短距离。在每次迭代中，首先找到所有未被更新的点中距离原点最近的点，然后更新它到原点的最短距离，并根据新的距离，更新其他点到原点的距离
+
+从 A 向外扩散
+
+\begin{minted}{js}
+dist.B =
+  Math.min(dist.B, dist.A + weight("A", "B")) =
+  Math.min(Infinity, 0 + 5) =
+    5;
+
+dist.C =
+  Math.min(dist.C, dist.A + weight("A", "C")) =
+  Math.min(Infinity, 0 + 4) =
+    4;
+\end{minted}
+
+从 B 向外扩散
+
+\begin{minted}{js}
+dist.D =
+  Math.min(dist.D, dist.B + weight("B", "D")) =
+  Math.min(Infinity, 5 + 6) =
+    11;
+\end{minted}
+
+从 C 向外扩散
+
+\begin{minted}{js}
+dist.D = 
+  Math.min(dist.D, dist.C + weight("C", "D")) = 
+  Math.min(11, 4 + 5) = 
+    9;
+\end{minted}
+
+得到结果
+
+\begin{minted}{js}
+dist = {
+  A: 0,
+  B: 5,
+  C: 4,
+  D: 9,
+};
+\end{minted}
+
+所以，从 A 到 D 的最短距离为 9
+
+
+\subsection{Bellman-Ford}
+
+求含负权图的单源最短路径，遍历全图 V - 1 次，能缩小距离的就缩小
+
+BV1j34y1s7d8
+
+
 \section{Programming}
+
+
+\subsection{Arithmetical and logical operations}
+
+\begin{description}
+    \item[算数] \verb|+ - * / % ++ --|
+
+    \item[关系] \verb|== != > < >= <=|
+
+    \item[逻辑] \verb|&&| || !
+
+    \item[位] \& | ~ \verb|^ << >>|
+
+    \item[赋值] \verb|= += -= *= /=|
+\end{description}
+
+
+\subsection{Control structures (conditional and unconditional flow control, loops)}
+
+\begin{description}
+    \item[条件语句] if else switch
+
+    \item[循环] for in of do while break continue
+\end{description}
+
+
+\subsection{Functions and procedures (subprograms, subroutines)}
+
+Function：Subprograms，重用代码块，执行特定任务
+
+Procedure：Subroutine，不返回一个值，通过副作用
+
+
+\subsection{data passing}
+
+\begin{description}
+    \item[按值传递] 传递副本
+    \item[按引用传递] 传递指针
+    \item[ref] 按引用传递值类型 
+    \item[int[]] 按值传递引用类型 
+\end{description}
+
+
+\subsection{local and global variables}
+
+\begin{description}
+    \item[local] 在作用域内声明，会销毁
+
+    \item[global] 可以从任何部分访问
+\end{description}
+
+
+\subsection{the role of stacks in function calls}
+
+Call Stack 是管理函数调用关系的结构，保证调用顺序和追踪
+
+
+\subsubsection{Stack Frame}
+
+函数的参数和局部变量等储存在 Stack Frame 中，并入 Call Stack，当执行完毕后弹出，包含了函数的执行环境，包括：Function Parameters、Local Variables、Return Address
+
+
+\subsubsection{Function Call}
+
+当函数被调用时
+
+\begin{enumerate}
+    \item 返回地址（函数结束后的指令）入栈
+    \item 参数入栈
+    \item 跳转到函数起始位置，进入函数
+    \item 创建新的 Stack Frame，局部变量 Allocated
+    \item 执行
+\end{enumerate}
+
+
+\subsubsection{Function Return}
+
+当函数执行完毕，准备返回时
+
+\begin{enumerate}
+    \item 如果函数有返回值，它被储存在特定位置，供调用者访问
+    \item 函数的 Frame 从调用栈弹出，局部变量和参数被销毁
+    \item 跳到返回地址，继续执行
+\end{enumerate}
+
+
+\subsubsection{Recursion}
+
+当函数直接或间接调用自己，每一次调用都会创建新的 Stack Frame。调用栈的大小是有限制的。当递归层数过深或者函数调用过多时，调用栈可能会溢出
+
+
+\subsection{Basics of object-oriented programming: classes, objects, inheritance, polymorphism, encapsulation}
+
+
 
 
 \section{Compilers}
