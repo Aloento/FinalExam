@@ -31,9 +31,6 @@
 \begin{document}
 
 
-Informatics
-
-
 \section{Processors \& Memories}
 
 
@@ -333,21 +330,21 @@ Interrupt-Request。I/O 准备好时，向 CPU 发送中断请求，并处理需
 \subsection{Functionality}
 
 \begin{description}
-    \item[Process] 管理进程，分配 CPU 时间，优先级
+    \item[管理 Process] 分配 CPU 时间，优先级
 
-    \item[Memory] 管理虚拟内存，分配内存，内存边界
+    \item[管理 Memory] 虚拟内存，分配内存，内存边界
 
-    \item[File System] 管理空间分配，控制访问，维护完整性
+    \item[File System] 空间分配，控制访问，维护完整性
 
-    \item[Device] 管理连接设备，提供标准化接口
+    \item[管理 Device] 提供标准化接口
 
-    \item[UI] 用户互动，CLI / GUI
+    \item[UI] CLI / GUI
 
-    \item[Security] 认证授权
+    \item[Security] Authentication / Authorization
 
-    \item[Networking] 进程间，网络上通信
+    \item[Networking] 进程间，网络上
 
-    \item[Error Handling] 处理错误，保持稳定
+    \item[Error Handling]
 \end{description}
 
 
@@ -439,7 +436,7 @@ Interrupt-Request。I/O 准备好时，向 CPU 发送中断请求，并处理需
 调整代码和数据所处的内存地址，允许它在不同的位置执行，多个进程有效分享有限的内存
 
 \begin{description}
-    \item[Static] 地址在编译或链接时被调整，产物包含最终的地址，程序只能在特定的地址被加载。简单快速但不灵活，一旦加载就不能移动
+    \item[Static] 地址在编译或链接时调整，产物包含最终地址，程序只能在特定地址加载。简单快速但不灵活，一旦加载就不能移动
 
     \item[Dynamic] 运行时调整地址。加载到内存时会计算实际位置与参考位置的差异，称之为 Relocation Constant 或 Base Address，被添加到程序中每个内存的引用中。允许多个程序共享同一内存空间而不冲突
 \end{description}
@@ -447,7 +444,7 @@ Interrupt-Request。I/O 准备好时，向 CPU 发送中断请求，并处理需
 
 \subsubsection{Protection}
 
-防止程序没有授权的情况下访问修改另一个程序的内存，确保系统稳定性，安全性和完整性。它维持进程隔离，保护敏感数据，防止非法操作导致的系统崩溃。
+防止程序非法操作另一个程序的内存，确保稳定性，安全性和完整性。它维持进程隔离，保护敏感数据，防止非法操作导致的系统崩溃。
 
 \begin{description}
     \item[Memory Management Unit] 硬件，将虚拟地址到物理地址。检查进程访问权限，实时内存保护。若有非法访问，则会抛出异常，让操作系统采取行动，如终止进程
@@ -466,12 +463,7 @@ Interrupt-Request。I/O 准备好时，向 CPU 发送中断请求，并处理需
 
 \subsubsection{Swapping}
 
-在 RAM 与 硬盘 之间移动数据以释放 RAM 空间的操作，是虚拟内存管理的关键部分。当 RAM 可用不足时，OS 可能会将一些不常用的数据 swapping out 或 paging out，当再次需要时，会被 in 到 RAM。
-
-Swap 是使用磁盘空间来扩展 RAM 的有效方法，然而会减慢系统速度，所以 OS 使用复杂的算法，根据频率，内存用量等因素决定哪些部分可以且何时进行交换。同时结合硬件，如 Translation Lookaside Buffers 和 MMU 来优化性能。
-
-TLB：CPU 的一种缓存，由 MMU 用于改进虚拟到物理地址的转译速度
-
+Swap 是使用磁盘空间来扩展、释放 RAM 空间的操作，是虚拟内存管理的关键部分。当 RAM 可用不足时，OS 可能会将一些不常用的数据 swapping out 或 paging out，当再次需要时，会被 in 到 RAM。然而这会减慢系统速度，所以 OS 使用复杂的算法，根据频率，内存用量等因素决定哪些部分可以且何时进行交换
 
 \subsubsection{Paging}
 
@@ -586,7 +578,7 @@ TCP/IP 协议是一个协议簇，包含很多协议，UDP TCP ICMP IP...
 
     \item[Repeaters] 1，中继，放大信号，扩大覆盖范围
 
-    \item[Bridges] 2，桥接，连接两个独立的网段。根据 MAC 地址，创建过滤表以减少不必要的流量，\\ 并转发数据
+    \item[Bridges] 2，桥接，连接两个独立的网段。根据 MAC 地址，有过滤表，转发数据
 
     \item[Hubs] 1，集线，连接网络中多个设备，并将数据转发给所有连接的设备，没有过滤等功能
 
@@ -607,9 +599,9 @@ TCP/IP 协议是一个协议簇，包含很多协议，UDP TCP ICMP IP...
 
     \item[Speed] 100 M / 1 G / 10 G 等
 
-    \item[Frame] Preamble, Destination / Source MAC address, EtherType (indicating the payload's protocol), Payload (data), Frame Check Sequence.
+    \item[Frame] Preamble, Destination / Source MAC address, EtherType (payload's protocol), Payload (data), Frame Check Sequence.
 
-    \item[MAC] Carrier Sense Multiple Access with Collision Detection，在传输之前会监听空闲的通道，如果发生多个设备同时传输，则在重试之前会等待一段随机时间
+    \item[MAC] 在传输之前会监听空闲的通道，如果发生多个设备同时传输，则在重试之前会等待一段随机时间
 \end{description}
 
 
@@ -770,23 +762,11 @@ NAT Behavior：
 \end{description}
 
 
-\subsubsection{Open Shortest Path First}
-
-在 OSPF 前，广泛使用 RIP（Routing Information Protocol）作为内部网关协议。由于 RIP 是基于距离矢量算法的路由协议，存在着收敛慢、路由环路、可扩展性差等问题，所以被 OSPF 取代。作为基于链路状态的协议，优点：
-
-\begin{enumerate}
-    \item 组播形式收发报文，减少对其它不运行 OSPF 路由器的影响
-    \item CIDR
-    \item 对等价路由进行负载分担
-    \item 报文加密
-\end{enumerate}
-
-
 \subsubsection{Border Gateway Protocol}
 
 在 Autonomous System 间交换 Network Layer Reachability Information 的协议。当运行于同一 AS 内部时，被称为 Internel BGP，不同 AS 之间时，称为 Externel BGP。
 
-发送 BGP 报文的路由设备称为 Speaker，它接收或产生新的路由，并 Advertise 给其他邻居。BGP 通过 TCP 传递，有Open、Update、Notification (Stop)、Keepalive 和 Route-refresh五种报文类型
+发送 BGP 报文的路由设备称为 Speaker，它接收或产生新的路由，并 Advertise 给其他邻居。BGP 通过 TCP 传递，有Open、Update、Notification (Stop)、Keepalive 和 Route-refresh 五种报文类型
 
 
 \subsection{Transmission Control Protocol}
@@ -892,7 +872,7 @@ TCP不是一个自私的协议，当拥塞发生的时候，要做自我牺牲
 
 \paragraph{Congestion Avoidance} ~
 
-一般 ssthresh 的值是 65535 kb，当cwnd达到这个值时后
+一般 ssthresh 的值是 65535 kb，当 cwnd 达到这个值时后
 
 \begin{enumerate}
     \item 收到一个ACK时，cwnd + 1 / cwnd
@@ -1018,11 +998,6 @@ QoS 模型不是一个具体功能，而是端到端 QoS 设计的一个方案�
     \item[Iterative] DNS 服务器询问其他服务器
     \item[Recursive] 返回另一个 DNS 服务器地址
 \end{description}
-
-
-\subsubsection{为什么用 UDP}
-
-节省网络资源，一个请求一个应答。DNS 数据包较小，不需要分包，只需要考虑丢包和重试。DNS 报文允许填入序号，请求和其应答报文的序号相同。
 
 
 \subsubsection{常见记录类型}
@@ -1471,7 +1446,7 @@ Clustered Index
     \item Primary Key 默认
 \end{itemize}
 
-Nonclustered Index
+Non-clustered Index
 
 \begin{itemize}
     \item 储存的是指向行的指针
