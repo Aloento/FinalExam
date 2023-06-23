@@ -232,12 +232,12 @@ handling is the process of managing the communication between CPU and devices.
 
 \subsubsection{Programmed}
 
-最简单，基本，低效率。CPU 直接控制 I/O 设备和 存储器 之间的数据传输
+最简单，基本，低效率。CPU 直接控制 I/O 设备和 存储器 之间的数据传输，轮询
 
 
 \subsubsection{IRQ}
 
-Interrupt-Request。I/O 需要运算时，向 CPU 发送中断请求，并处理需求
+Interrupt-Request。I/O 准备好时，向 CPU 发送中断请求，并处理需求
 
 
 \subsubsection{Direct Memory Access}
@@ -2442,25 +2442,136 @@ Java 之类使用 IL，预编译
 \section{System Engineering}
 
 
-Mathematics
+\subsection{Basics of UML}
+
+Unified Modeling Language，用图形符号描述系统结构，行为，相互作用
+
+\begin{description}
+    \item[Class] 属性，方法，关系，约束，静态结构
+    
+    \item[Object] 快照，类的实例
+
+    \item[Use Case] Actors 和 功能的交互
+
+    \item[Sequence] 按照时间说明对象间的互动
+
+    \item[Component] 模块，库之类的依赖关系
+\end{description}
 
 
-\section{Set}
+\subsection{Meta-models}
+
+The underlying framework or language used to define and describe the construct and rules of UML. 它定义了 UML 的 syntax and semantics，用于解释模型
 
 
-\section{Logics}
+\subsection{The 4-layer meta-model of UML}
+
+\begin{description}
+    \item[M0] Run-Time instances，代表实际运行中存在的具体对象和数据
+
+    \item[M1] User model，用户对系统的理解，如何互动，期望，目标和任务
+
+    \item[M2] UML 抽象，用来定义 meta models
+
+    \item[M3] Meta-Object Facility，最高抽象
+\end{description}
 
 
-\section{Linear Algebra}
+\subsection{Basics of workflow modeling}
+
+\begin{description}
+    \item[Identify Boundaries] 要建模的内容，范围，输入输出等
+
+    \item[Define Objectives] 确定模型目标，期望的结果，限制等
+
+    \item[Identify Components] 确定组成部分
+
+    \item[Establish Relationships] 确定关系和依赖
+
+    \item[Model Structure] 使用图形符号来表示
+
+    \item[Specify Logic] 确定条件判断，循环，异常处理等
+
+    \item[Iterate and Refine] 继续完善
+\end{description}
 
 
-\section{Calculus}
+\subsection{The Software Process Engineering Model (SPEM) UML profile describes the classic and RUP methodologies steps}
 
 
-\section{Probability}
+\subsubsection{Classic Waterfall}
+
+\begin{description}
+    \item[Requirements Analysis] 
+
+    \item[System Design] 
+
+    \item[Implementation] 
+
+    \item[Testing and Integration] 
+
+    \item[Deployment] 
+
+    \item[Operation and Maintenance] 
+\end{description}
 
 
-\section{Numerical}
+\subsubsection{Rational Unified Process}
+
+\begin{description}
+    \item[Inception] 确定范围，目标，风险，提案，可行性
+
+    \item[Elaboration] 确定优先次序，设计系统结构，企划案
+
+    \item[Construction] 实现系统，测试，审查
+
+    \item[Transition] 验收测试，部署
+\end{description}
+
+
+\subsection{Programming and software engineering technologies and methodologies}
+
+\begin{description}
+    \item[Programming Languages] Java
+    
+    \item[Integrated Development Environments] VS IDEA
+
+    \item[Version Control Systems] GIT
+
+    \item[Agile Methodologies] Kanban
+
+    \item[DevOps] Continuous Integration / Delivery
+
+    \item[Software Development Lifecycle] Waterfall
+\end{description}
+
+
+\subsection{Procedural techniques}
+
+编程范式，OOP 是一种
+
+\begin{description}
+    \item[Modular Programming] ~
+
+    \begin{itemize}
+        \item Modularization
+        \item Encapsulation
+    \end{itemize}
+
+    \item[Control Structures] ~
+
+    \begin{itemize}
+        \item Sequence
+        \item Selection
+        \item Iteration
+    \end{itemize}
+
+    \item[Abstraction] 
+
+    \item[Variable Scope and Lifetime] 
+
+    \item[Error Handling] 
+\end{description}
 
 
 \end{document}
